@@ -169,6 +169,50 @@ canvas{display:block;}
 .hwpanel-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
 .hwpanel.today-panel{border-left:3px solid var(--accent2);}
 @media(max-width:900px){.g2,.g3,.g4,.gcols{grid-template-columns:1fr;}.main{padding:16px;}.header{padding:0 16px;}}
+
+/* ═══ MOBILE / iPHONE OPTIMIZATIONS ═══ */
+@media(max-width:768px){
+  body{font-size:14px;}
+  .header{height:52px;padding:0 12px;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:17px;margin-right:0;}
+  .brand em{font-size:13px;}
+  .nav{order:3;width:100%;padding-bottom:4px;}
+  .nav-btn{font-size:13px;padding:7px 12px;}
+  .hdate{display:none;}
+  .main{padding:14px 12px;}
+  .ptitle{font-size:24px;margin-bottom:16px;}
+  .card{padding:14px;}
+  .stat{padding:14px;}
+  .sval{font-size:26px;}
+  .g2,.g3,.g4,.gcols{grid-template-columns:1fr !important;gap:12px;}
+  .bigscore{font-size:60px;letter-spacing:-2px;}
+  .wdot{width:38px;height:38px;}
+  .mbars{height:40px;}
+  #bible-grid{grid-template-columns:1fr !important;}
+  /* iOS zoom prevention: inputs must be ≥16px */
+  input,textarea,select,.inp,.sel{font-size:16px !important;}
+  /* Larger touch targets */
+  .chk{width:24px;height:24px;}
+  .chk.sm{width:22px;height:22px;}
+  .btn,.fbtn{padding:10px 16px;font-size:14px;}
+  .dbtn{padding:6px 10px;font-size:18px;}
+  .bctrl{width:30px;height:30px;font-size:16px;}
+  .day-pill span{padding:8px 12px;font-size:13px;}
+  /* Dropdown menus */
+  #backup-menu{min-width:220px !important;}
+  #backup-menu button{padding:12px 14px !important;font-size:14px !important;}
+  /* Crypto grid: stack on mobile */
+  .crypto-row{grid-template-columns:50px 1fr 1fr 28px !important;gap:6px !important;}
+  .crypto-val-col{display:none !important;}
+  .crypto-value-inline{display:inline !important;font-size:11px;color:var(--text3);}
+}
+
+/* Very small iPhones (SE, mini) */
+@media(max-width:400px){
+  .main{padding:10px 8px;}
+  .card{padding:12px;}
+  .nav-btn{font-size:12px;padding:6px 10px;}
+}
 </style>
 </head>
 <body>
@@ -508,7 +552,7 @@ canvas{display:block;}
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">💼 Salaire mensuel net</div>
         <div style="display:flex;align-items:baseline;gap:8px">
-          <input class="inp" id="ni-salaire" type="number" style="font-family:'Instrument Serif',serif;font-size:34px;font-weight:400;background:transparent;border:none;padding:0;width:140px;color:var(--accent);outline:none" oninput="updateSalary(this.value)"/>
+          <input class="inp" id="ni-salaire" type="number" inputmode="decimal" style="font-family:'Instrument Serif',serif;font-size:34px;font-weight:400;background:transparent;border:none;padding:0;width:140px;color:var(--accent);outline:none" oninput="updateSalary(this.value)"/>
           <span style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text3)">CHF</span>
         </div>
       </div>
@@ -545,7 +589,7 @@ canvas{display:block;}
             <span style="font-size:13px;font-weight:600">Épargne</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px">
-            <input type="number" id="ni-epargne" oninput="updatePatrimoine('epargne',this.value)" style="width:90px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 8px;color:var(--green);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
+            <input type="number" inputmode="decimal" id="ni-epargne" oninput="updatePatrimoine('epargne',this.value)" style="width:110px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 10px;color:var(--green);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
             <span style="color:var(--text3);font-size:11px">CHF</span>
           </div>
         </div>
@@ -559,7 +603,7 @@ canvas{display:block;}
             <span style="font-size:13px;font-weight:600">Investissements</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px">
-            <input type="number" id="ni-invest" oninput="updatePatrimoine('investissements',this.value)" style="width:90px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 8px;color:var(--accent);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
+            <input type="number" inputmode="decimal" id="ni-invest" oninput="updatePatrimoine('investissements',this.value)" style="width:110px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 10px;color:var(--accent);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
             <span style="color:var(--text3);font-size:11px">CHF</span>
           </div>
         </div>
@@ -610,17 +654,17 @@ canvas{display:block;}
         <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:8px">Hypothèses de rendement annuel</div>
         <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
           <span style="font-size:11px;flex:1">📈 Investissements</span>
-          <input type="number" step="0.1" id="ni-rend" oninput="updateRendement(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:var(--accent);font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <input type="number" inputmode="decimal" step="0.1" id="ni-rend" oninput="updateRendement(this.value)" style="width:70px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 8px;color:var(--accent);font-size:12px;font-weight:700;text-align:right;outline:none"/>
           <span style="font-size:11px;color:var(--text3)">% / an</span>
         </div>
         <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
           <span style="font-size:11px;flex:1">🪙 Crypto</span>
-          <input type="number" step="0.1" id="ni-crypto-rend" oninput="updateCryptoRendement(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:#f7931a;font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <input type="number" inputmode="decimal" step="0.1" id="ni-crypto-rend" oninput="updateCryptoRendement(this.value)" style="width:70px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 8px;color:#f7931a;font-size:12px;font-weight:700;text-align:right;outline:none"/>
           <span style="font-size:11px;color:var(--text3)">% / an</span>
         </div>
         <div style="display:flex;gap:10px;align-items:center">
           <span style="font-size:11px;flex:1">💰 Épargne</span>
-          <input type="number" step="0.1" id="ni-int" oninput="updateInteret(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:var(--green);font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <input type="number" inputmode="decimal" step="0.1" id="ni-int" oninput="updateInteret(this.value)" style="width:70px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 8px;color:var(--green);font-size:12px;font-weight:700;text-align:right;outline:none"/>
           <span style="font-size:11px;color:var(--text3)">% / an</span>
         </div>
       </div>
@@ -1792,23 +1836,25 @@ function rBudget(){
     <div class="stat"><div class="slbl">Épargne / mois</div><div class="sval" style="color:var(--green)">CHF ${(S.allocations.find(a=>a.name==='Épargne')?.amount||0)+(S.allocations.find(a=>a.name==='Investissements')?.amount||0)}</div><div class="ssub">épargne + invest.</div></div>
     <div class="stat"><div class="slbl">Fortune actuelle</div><div class="sval" style="color:var(--accent)">CHF ${(S.patrimoine.epargne+S.patrimoine.investissements+cryptoValueTotal()).toLocaleString('fr-CH')}</div><div class="ssub">épargne + invest. + crypto</div></div>`;
 
-  // Allocation cards
+  // Allocation cards — preserve focus on any input being typed
+  const _allocFocusedId = document.activeElement && document.activeElement.id;
+  const _allocFocusedPos = (document.activeElement && document.activeElement.selectionStart!=null) ? document.activeElement.selectionStart : null;
   document.getElementById('b-allocs').innerHTML = S.allocations.map(a=>{
     const spent = S.deps.filter(d=>d.allocId===a.id).reduce((s,d)=>s+d.amt,0);
     const remaining = a.amount - spent;
     const usedPct = a.amount>0 ? Math.min(100, spent/a.amount*100) : 0;
     return `<div style="padding:12px 0;border-bottom:1px solid var(--border)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px">
-        <div style="display:flex;align-items:center;gap:8px;flex:1">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
           <span style="font-size:18px">${a.emoji}</span>
-          <div>
-            <div style="font-size:13px;font-weight:600">${a.name}</div>
-            <div style="font-size:10px;color:var(--text3)">${Math.round(a.amount/S.salaire*100)}% du salaire</div>
+          <div style="min-width:0">
+            <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis">${a.name}</div>
+            <div style="font-size:10px;color:var(--text3)">${S.salaire>0?Math.round(a.amount/S.salaire*100):0}% du salaire</div>
           </div>
         </div>
-        <div style="text-align:right">
-          <input type="number" value="${a.amount}" oninput="updateAlloc(${a.id}, this.value)" style="width:75px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:5px 8px;color:${a.color};font-family:'Geist',sans-serif;font-size:13px;font-weight:700;text-align:right;outline:none"/>
-          <span style="color:var(--text3);font-size:11px;margin-left:2px">CHF</span>
+        <div style="text-align:right;display:flex;align-items:center;gap:4px">
+          <input type="number" inputmode="decimal" id="alloc-inp-${a.id}" value="${a.amount}" oninput="updateAlloc(${a.id}, this.value)" style="width:90px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:7px 10px;color:${a.color};font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
+          <span style="color:var(--text3);font-size:11px">CHF</span>
         </div>
         <button class="dbtn" onclick="delAlloc(${a.id})">×</button>
       </div>
@@ -1821,6 +1867,11 @@ function rBudget(){
       </div>
     </div>`;
   }).join('');
+  // Restore focus
+  if(_allocFocusedId && _allocFocusedId.startsWith('alloc-inp-')){
+    const el = document.getElementById(_allocFocusedId);
+    if(el){ el.focus(); if(_allocFocusedPos!=null) try{ el.setSelectionRange(_allocFocusedPos,_allocFocusedPos);}catch(_){} }
+  }
 
   // Recent deps
   document.getElementById('b-trans').innerHTML = [...S.deps].reverse().slice(0,8).map(d=>{
@@ -1868,12 +1919,12 @@ function rBudget(){
       const value = (l.qty||0) * (l.price||0);
       const qtyId = 'ni-crypto-qty-'+l.id;
       const priceId = 'ni-crypto-price-'+l.id;
-      return `<div style="display:grid;grid-template-columns:56px 1fr 90px 90px 20px;gap:8px;align-items:center">
-        <span style="font-size:11px;font-weight:700;color:${l.color};white-space:nowrap">${l.symbol}</span>
-        <input type="number" step="0.00000001" id="${qtyId}" value="${l.qty||''}" oninput="updateCryptoQty(${l.id},this.value)" placeholder="0" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;text-align:right;outline:none;width:100%"/>
-        <input type="number" step="0.01" id="${priceId}" value="${l.price||''}" oninput="updateCryptoPrice(${l.id},this.value)" placeholder="prix" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:${l.color};font-family:'Geist',sans-serif;font-size:11px;font-weight:600;text-align:right;outline:none;width:100%"/>
-        <span style="font-size:11px;font-weight:600;color:var(--accent);white-space:nowrap;text-align:right">CHF ${Math.round(value).toLocaleString('fr-CH')}</span>
-        <button onclick="delCryptoLine(${l.id})" title="Supprimer cette ligne" style="background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;font-size:13px;line-height:1;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">×</button>
+      return `<div class="crypto-row" style="display:grid;grid-template-columns:56px 1fr 90px 90px 20px;gap:8px;align-items:center">
+        <span style="font-size:13px;font-weight:700;color:${l.color};white-space:nowrap">${l.symbol}</span>
+        <input type="number" inputmode="decimal" step="0.00000001" id="${qtyId}" value="${l.qty||''}" oninput="updateCryptoQty(${l.id},this.value)" placeholder="0" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 10px;color:var(--text);font-family:'Geist',sans-serif;font-size:13px;text-align:right;outline:none;width:100%;min-width:0"/>
+        <input type="number" inputmode="decimal" step="0.01" id="${priceId}" value="${l.price||''}" oninput="updateCryptoPrice(${l.id},this.value)" placeholder="prix" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 10px;color:${l.color};font-family:'Geist',sans-serif;font-size:13px;font-weight:600;text-align:right;outline:none;width:100%;min-width:0"/>
+        <span class="crypto-val-col" id="crypto-val-${l.id}" style="font-size:11px;font-weight:600;color:var(--accent);white-space:nowrap;text-align:right">CHF ${Math.round(value).toLocaleString('fr-CH')}</span>
+        <button onclick="delCryptoLine(${l.id})" title="Supprimer cette ligne" style="background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;font-size:16px;line-height:1;transition:color .15s">×</button>
       </div>`;
     }).join('') || '<div style="color:var(--text3);font-size:11px;padding:8px 0;text-align:center;font-style:italic">Aucune crypto — ajoute-en une ci-dessous</div>';
 
@@ -1920,7 +1971,8 @@ function updateCryptoQty(id, val){
   const n = parseFloat(val);
   l.qty = isNaN(n) ? 0 : Math.max(0, n);
   S.crypto.lastUpdate = new Date().toISOString();
-  rBudget();
+  saveOnly();
+  rebudgetSoft();
 }
 function updateCryptoPrice(id, val){
   const l = S.crypto.lines.find(x => x.id === id);
@@ -1929,7 +1981,8 @@ function updateCryptoPrice(id, val){
   if(!isNaN(n) && n >= 0){
     l.price = n;
     S.crypto.lastUpdate = new Date().toISOString();
-    rBudget();
+    saveOnly();
+    rebudgetSoft();
   }
 }
 function delCryptoLine(id){
@@ -1998,17 +2051,20 @@ function updatePatrimoine(key, val){
   const n = parseFloat(val);
   if(!isNaN(n) && n>=0){
     S.patrimoine[key] = n;
-    rBudget();
+    saveOnly();
+    rebudgetSoft();
+    drawPatrimoineChart();
   }
 }
 function updateRendement(val){
   const n = parseFloat(val);
-  if(!isNaN(n)){ S.patrimoine.rendementAnnuel = n; drawPatrimoineChart(); }
+  if(!isNaN(n)){ S.patrimoine.rendementAnnuel = n; saveOnly(); drawPatrimoineChart(); }
 }
 function updateInteret(val){
   const n = parseFloat(val);
-  if(!isNaN(n)){ S.patrimoine.interetEpargne = n; drawPatrimoineChart(); }
+  if(!isNaN(n)){ S.patrimoine.interetEpargne = n; saveOnly(); drawPatrimoineChart(); }
 }
+
 
 function drawPatrimoineChart(){
   const cv = document.getElementById('patrimoine-chart');
@@ -2249,13 +2305,55 @@ function rBible(){
 
 // ══ PERSISTENCE ══
 const STORAGE_KEY = '2eme-cerveau-state-v1';
+let _saveTimer = null;
 
 function saveState(){
+  // Debounce: évite d'écrire à chaque frappe
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+    } catch(e){
+      console.warn('Sauvegarde impossible :', e);
+    }
+  }, 300);
+}
+
+// Mise à jour "silencieuse" d'un chiffre: sauvegarde seule, PAS de renderAll
+// Utilisée pendant que l'utilisateur tape, pour ne pas perdre le focus
+function saveOnly(){ saveState(); }
+
+// Recalcule les totaux SANS reconstruire le DOM des inputs
+function rebudgetSoft(){
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
-  } catch(e){
-    console.warn('Sauvegarde impossible :', e);
-  }
+    const cryptoVal = cryptoValueTotal();
+    const el = document.getElementById('b-crypto-total');
+    if(el) el.textContent = Math.round(cryptoVal).toLocaleString('fr-CH');
+    // Valeurs par ligne crypto (hors inputs)
+    S.crypto.lines.forEach(l => {
+      const valEl = document.getElementById('crypto-val-'+l.id);
+      if(valEl){
+        const v = (l.qty||0) * (l.price||0);
+        valEl.textContent = 'CHF '+Math.round(v).toLocaleString('fr-CH');
+      }
+    });
+    // Totaux budget
+    const totalAlloc = (S.allocations||[]).reduce((s,a)=>s+(a.amount||0),0);
+    const balance = (S.salaire||0) - totalAlloc;
+    const allocEl = document.getElementById('b-allocated');
+    if(allocEl) allocEl.textContent = 'CHF ' + totalAlloc.toFixed(0);
+    const balEl = document.getElementById('b-balance');
+    if(balEl){
+      if(balance<0) balEl.innerHTML='<span style="color:var(--red)">CHF '+balance.toFixed(0)+' en dépassement</span>';
+      else if(balance>0) balEl.innerHTML='<span style="color:var(--amber)">CHF '+balance.toFixed(0)+' non alloués</span>';
+      else balEl.innerHTML='<span style="color:var(--green)">✓ Finances équilibrées</span>';
+    }
+    // Stat vue d'ensemble
+    const ovb = document.getElementById('ov-b');
+    if(ovb) ovb.textContent = 'CHF ' + (S.salaire||0).toLocaleString('fr-CH');
+    const ovbSub = document.getElementById('ov-b-sub');
+    if(ovbSub) ovbSub.textContent = balance>=0 ? 'CHF '+balance.toFixed(0)+' restant' : 'CHF '+Math.abs(balance).toFixed(0)+' dépassé';
+  } catch(e){ /* silent */ }
 }
 
 function loadState(){
@@ -2371,11 +2469,11 @@ function addDep(){
   renderAll();
 }
 function delDep(id){S.deps=S.deps.filter(d=>d.id!==id);renderAll();}
-function updateSalary(v){const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.salaire=n;rBudget();}}
+function updateSalary(v){const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.salaire=n;saveOnly();rebudgetSoft();}}
 function updateAlloc(id,v){
   const a=S.allocations.find(x=>x.id===id);
   const n=parseFloat(v);
-  if(a&&!isNaN(n)&&n>=0){a.amount=n;rBudget();}
+  if(a&&!isNaN(n)&&n>=0){a.amount=n;saveOnly();rebudgetSoft();}
 }
 function addAlloc(){
   const name=document.getElementById('ni-alloc-name').value.trim();
