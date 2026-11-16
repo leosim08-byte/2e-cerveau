@@ -1,1 +1,2436 @@
-# index.html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ᵉ Cerveau</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#0f0e0c; --bg2:#161512; --surface:#1c1a17; --surface2:#232119;
+  --border:#2e2b25; --border2:#3a3730;
+  --text:#f0ece4; --text2:#a09a8e; --text3:#5a5650;
+  --accent:#e8d5a3; --accent2:#c4a96b;
+  --green:#4ade80; --green-d:#166534; --green-bg:#0a1f10;
+  --red:#f87171; --red-bg:#1f0a0a;
+  --amber:#fbbf24; --amber-bg:#1f1608;
+  --blue:#60a5fa; --blue-bg:#080f1f;
+  --purple:#a78bfa; --purple-bg:#100c1f;
+  --r:12px; --r-sm:7px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:200;background:rgba(15,14,12,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;height:56px;}
+.brand{font-family:'Instrument Serif',serif;font-size:19px;color:var(--accent);letter-spacing:-0.3px;margin-right:32px;white-space:nowrap;}
+.brand em{font-style:italic;color:var(--text2);font-size:15px;}
+.nav{display:flex;gap:2px;flex:1;overflow-x:auto;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-family:'Geist',sans-serif;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--r-sm);transition:all .18s;white-space:nowrap;}
+.nav-btn:hover{color:var(--text2);background:var(--surface);}
+.nav-btn.active{color:var(--accent);background:var(--surface2);}
+.hdate{font-size:11px;color:var(--text3);white-space:nowrap;margin-left:12px;}
+
+/* LAYOUT */
+.main{padding:28px;max-width:1360px;margin:0 auto;}
+.section{display:none;animation:fi .22s ease;}
+.section.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.gcols{display:grid;grid-template-columns:360px 1fr;gap:16px;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;}
+.ct{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+
+/* STATS */
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;}
+.sval{font-family:'Instrument Serif',serif;font-size:32px;letter-spacing:-1px;line-height:1;margin:6px 0 4px;}
+.slbl{font-size:10px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.8px;}
+.ssub{font-size:11px;color:var(--text3);}
+
+/* PAGE TITLE */
+.ptitle{font-family:'Instrument Serif',serif;font-size:28px;letter-spacing:-.5px;color:var(--text);margin-bottom:22px;display:flex;align-items:baseline;gap:12px;}
+.ptitle small{font-family:'Geist',sans-serif;font-size:10px;color:var(--text3);font-weight:400;letter-spacing:.5px;}
+
+/* PROGRESS */
+.pbar{height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;border-radius:99px;background:var(--accent2);transition:width .5s ease;}
+.pfill.g{background:var(--green);}
+.pfill.p{background:var(--purple);}
+.pfill.r{background:var(--red);}
+.plbls{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:5px;}
+
+/* ROWS */
+.hrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.hrow:last-child{border-bottom:none;}
+.hname{flex:1;font-size:13px;}
+.hstreak{font-size:10px;color:var(--text3);white-space:nowrap;}
+.trow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);}
+.trow:last-child{border-bottom:none;}
+.ttext{flex:1;font-size:13px;}
+.ttext.done{text-decoration:line-through;color:var(--text3);}
+.exrow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);}
+.exrow:last-child{border-bottom:none;}
+.bcat{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);gap:10px;}
+.bcat:last-child{border-bottom:none;}
+.bcname{display:flex;align-items:center;gap:7px;font-weight:500;font-size:13px;}
+.objrow{padding:12px 0;border-bottom:1px solid var(--border);}
+.objrow:last-child{border-bottom:none;}
+.objhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.objname{font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;}
+.objpct{font-family:'Instrument Serif',serif;font-size:16px;color:var(--accent);}
+
+/* CHECKBOX */
+.chk{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;font-size:11px;color:transparent;}
+.chk.on{background:var(--green);border-color:var(--green);color:#0f0e0c;}
+.chk.sm{width:17px;height:17px;border-radius:4px;font-size:9px;}
+
+/* BADGES */
+.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.3px;white-space:nowrap;}
+.br{background:var(--red-bg);color:var(--red);border:1px solid #3a1010;}
+.ba{background:var(--amber-bg);color:var(--amber);border:1px solid #3a2a08;}
+.bm{background:var(--surface2);color:var(--text3);border:1px solid var(--border);}
+.bb{background:var(--blue-bg);color:var(--blue);border:1px solid #08183a;}
+.bg{background:var(--green-bg);color:var(--green);border:1px solid #0a2a10;}
+
+/* INPUTS */
+.irow{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap;}
+.inp{flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:8px 12px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;outline:none;transition:border .15s;}
+.inp:focus{border-color:var(--accent2);}
+.inp::placeholder{color:var(--text3);}
+.sel{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:8px 10px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;outline:none;cursor:pointer;}
+.btn{background:var(--accent2);color:#0f0e0c;border:none;border-radius:var(--r-sm);padding:8px 16px;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
+.btn:hover{opacity:.82;}
+.bsm{padding:5px 12px;font-size:11px;}
+.bgh{background:var(--surface2);color:var(--text2);border:1px solid var(--border2);}
+.bgh:hover{background:var(--border);opacity:1;}
+.bdng{background:var(--red-bg);color:var(--red);border:1px solid #3a1010;}
+.dbtn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:2px 5px;border-radius:4px;transition:all .12s;}
+.dbtn:hover{background:var(--red-bg);color:var(--red);}
+
+/* WEEK */
+.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px;}
+.wlbl{font-size:9px;color:var(--text3);text-align:center;font-weight:600;margin-bottom:5px;letter-spacing:.5px;}
+.wdot{width:34px;height:34px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:1.5px solid var(--border2);background:var(--bg2);cursor:pointer;transition:all .15s;color:var(--text3);}
+.wdot.done{background:var(--green);border-color:var(--green);color:#0f0e0c;}
+.wdot.today{border-color:var(--accent2);color:var(--accent);}
+.wdot.sport{background:var(--accent2);border-color:var(--accent2);color:#0f0e0c;}
+
+/* MINI BARS */
+.mbars{display:flex;align-items:flex-end;gap:3px;height:48px;}
+.mbar{flex:1;border-radius:3px 3px 0 0;background:var(--border2);transition:height .4s;min-height:3px;}
+.mbar.on{background:var(--accent2);}
+.mbar.cur{background:var(--green);}
+
+/* BIBLE */
+.bbook{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;border-left:3px solid var(--border2);transition:border-color .2s;}
+.bbook.started{border-left-color:var(--purple);}
+.bbook.done{border-left-color:var(--green);}
+.bbhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.bbname{font-size:13px;font-weight:600;}
+.bbpct{font-family:'Instrument Serif',serif;font-size:15px;}
+.bbctrls{display:flex;align-items:center;gap:5px;}
+.bctrl{width:24px;height:24px;border-radius:5px;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.bctrl-m{background:var(--surface2);color:var(--text2);border:1px solid var(--border2);}
+.bctrl-p{background:var(--purple);color:white;}
+.bctrl-a{background:var(--green-bg);color:var(--green);border:1px solid #0a2a10;font-size:9px;font-weight:700;padding:0 7px;width:auto;}
+.bdots{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px;}
+.bdot{width:16px;height:16px;border-radius:3px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;font-size:7px;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.bdot.read{background:var(--purple);border-color:var(--purple);color:white;}
+.fbtn{background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:5px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Geist',sans-serif;}
+.fbtn:hover{border-color:var(--text3);color:var(--text);}
+.fbtn.active{background:var(--surface2);color:var(--accent);border-color:var(--accent2);}
+.frow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+
+/* SCORE */
+.bigscore{font-family:'Instrument Serif',serif;font-size:80px;line-height:1;letter-spacing:-4px;color:var(--accent);}
+
+/* TAG */
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:600;color:var(--text3);}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;background:var(--border2);outline:none;cursor:pointer;accent-color:var(--accent2);}
+textarea.inp{resize:vertical;min-height:100px;width:100%;}
+#bible-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+canvas{display:block;}
+.sp{height:16px;}
+/* DAY PILL */
+.day-pill{display:inline-flex;align-items:center;cursor:pointer;}
+.day-pill input{display:none;}
+.day-pill span{padding:4px 9px;border-radius:99px;font-size:10px;font-weight:700;border:1px solid var(--border2);background:var(--bg2);color:var(--text3);transition:all .15s;cursor:pointer;user-select:none;}
+.day-pill input:checked+span{background:var(--accent2);color:#0f0e0c;border-color:var(--accent2);}
+/* HABIT WEEK PANEL */
+.hwpanel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;}
+.hwpanel-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.hwpanel.today-panel{border-left:3px solid var(--accent2);}
+@media(max-width:900px){.g2,.g3,.g4,.gcols{grid-template-columns:1fr;}.main{padding:16px;}.header{padding:0 16px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">2ᵉ <em>Cerveau</em></div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="go('overview',this)">Vue d'ensemble</button>
+    <button class="nav-btn" onclick="go('habitudes',this)">Habitudes</button>
+    <button class="nav-btn" onclick="go('taches',this)">Tâches</button>
+    <button class="nav-btn" onclick="go('sport',this)">Sport</button>
+    <button class="nav-btn" onclick="go('budget',this)">Finance</button>
+    <button class="nav-btn" onclick="go('objectifs',this)">Objectifs</button>
+    <button class="nav-btn" onclick="go('spiritualite',this)">Spiritualité</button>
+  </nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="hdate" id="hdate"></div>
+    <div style="position:relative">
+      <button onclick="document.getElementById('backup-menu').classList.toggle('open')" title="Sauvegarde" style="background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:var(--r-sm);padding:4px 10px;font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">💾 Sauvegarde</button>
+      <div id="backup-menu" style="position:absolute;top:calc(100% + 6px);right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px;display:none;flex-direction:column;gap:2px;min-width:200px;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+        <button onclick="exportState();document.getElementById('backup-menu').classList.remove('open')" style="background:transparent;border:none;color:var(--text);padding:8px 12px;text-align:left;font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;border-radius:4px;transition:background .15s" onmouseover="this.style.background='rgba(196,169,107,0.1)'" onmouseout="this.style.background='transparent'">⬇️ Exporter mes données</button>
+        <button onclick="document.getElementById('import-file').click();document.getElementById('backup-menu').classList.remove('open')" style="background:transparent;border:none;color:var(--text);padding:8px 12px;text-align:left;font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;border-radius:4px;transition:background .15s" onmouseover="this.style.background='rgba(196,169,107,0.1)'" onmouseout="this.style.background='transparent'">⬆️ Importer un fichier</button>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <button onclick="resetState()" style="background:transparent;border:none;color:#ef4444;padding:8px 12px;text-align:left;font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;border-radius:4px;transition:background .15s" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">🗑️ Tout effacer</button>
+      </div>
+      <input type="file" id="import-file" accept=".json" onchange="importState(event)" style="display:none"/>
+    </div>
+  </div>
+</header>
+
+<style>
+  #backup-menu.open { display:flex !important; }
+</style>
+
+<main class="main">
+
+<!-- OVERVIEW -->
+<div class="section active" id="s-overview">
+  <div class="ptitle">Vue d'ensemble <small id="ov-day"></small></div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="stat"><div class="slbl">Habitudes</div><div class="sval" id="ov-h">—</div><div class="ssub">cochées aujourd'hui</div></div>
+    <div class="stat"><div class="slbl">Tâches</div><div class="sval" id="ov-t">—</div><div class="ssub">complétées</div></div>
+    <div class="stat"><div class="slbl">Salaire net</div><div class="sval" id="ov-b">—</div><div class="ssub" id="ov-b-sub">non alloué</div></div>
+    <div class="stat"><div class="slbl">Séance du jour</div><div class="sval" style="font-size:16px;line-height:1.2" id="ov-seance">—</div><div class="ssub" id="ov-seance-sub">—</div></div>
+  </div>
+  <!-- Morning routine banner overview -->
+  <div id="ov-morning" style="margin-bottom:16px"></div>
+
+  <!-- Main grid: left=chart+tasks+objectives / right=score+tomorrow -->
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+
+    <!-- LEFT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="ct">📊 Réussite des routines — 21 derniers jours</div>
+        <canvas id="rchart" height="160"></canvas>
+        <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:var(--accent2)"></div>Habitudes %</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:var(--green);opacity:.5"></div>Jours de sport</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple)"></div>Lecture Écritures</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">✅ Tâches prioritaires</div>
+        <div id="ov-tlist"></div>
+      </div>
+      <div class="card">
+        <div class="ct">🎯 Objectifs actifs</div>
+        <div id="ov-olist"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <!-- Score du jour -->
+      <div class="card">
+        <div class="ct">⚡ Score du jour</div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:10px">
+          <div class="bigscore" id="ov-score">0%</div>
+          <div style="font-size:11px;color:var(--text3);padding-bottom:10px">de tes routines<br>réussies aujourd'hui</div>
+        </div>
+        <div id="ov-hlist"></div>
+      </div>
+      <!-- Demain -->
+      <div class="card" style="background:var(--bg2);border-style:dashed">
+        <div id="ov-tomorrow"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HABITUDES -->
+<div class="section" id="s-habitudes">
+  <div class="ptitle">Habitudes</div>
+
+  <!-- Add habit form -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct">➕ Nouvelle habitude</div>
+    <div class="irow" style="flex-wrap:wrap;align-items:flex-start">
+      <input class="inp" id="ni-hab-name" placeholder="Nom de l'habitude…" style="min-width:200px"/>
+      <input class="inp" id="ni-hab-emoji" placeholder="Emoji" style="max-width:64px"/>
+      <select class="sel" id="ni-hab-scope">
+        <option value="day">📌 Quotidienne</option>
+        <option value="week">📅 Hebdomadaire</option>
+      </select>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:.5px;text-transform:uppercase">Jours (vide = tous les jours)</div>
+        <div style="display:flex;gap:5px" id="ni-hab-days">
+          <label class="day-pill"><input type="checkbox" value="0"/><span>Lun</span></label>
+          <label class="day-pill"><input type="checkbox" value="1"/><span>Mar</span></label>
+          <label class="day-pill"><input type="checkbox" value="2"/><span>Mer</span></label>
+          <label class="day-pill"><input type="checkbox" value="3"/><span>Jeu</span></label>
+          <label class="day-pill"><input type="checkbox" value="4"/><span>Ven</span></label>
+          <label class="day-pill"><input type="checkbox" value="5"/><span>Sam</span></label>
+          <label class="day-pill"><input type="checkbox" value="6"/><span>Dim</span></label>
+        </div>
+      </div>
+      <button class="btn" onclick="addHabit()" style="align-self:flex-end">+ Ajouter</button>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- AUJOURD'HUI -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:'Instrument Serif',serif;font-size:20px">Aujourd'hui</div>
+        <div id="h-day-score" class="badge bg">0 / 0</div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div id="h-day-list"></div>
+        <div style="margin-top:14px">
+          <div class="pbar"><div class="pfill g" id="h-bar" style="width:0%"></div></div>
+          <div class="plbls"><span>Score du jour</span><span id="h-pct">0%</span></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="ct">📅 Semaine en cours</div>
+        <div class="wgrid" id="h-week"></div>
+      </div>
+      <div class="card">
+        <div class="ct">📈 Activité du mois</div>
+        <div class="mbars" id="h-mbars"></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:6px"><span>J-20</span><span>J-10</span><span>Aujourd'hui</span></div>
+      </div>
+    </div>
+
+    <!-- CETTE SEMAINE -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:'Instrument Serif',serif;font-size:20px">Cette semaine</div>
+        <div id="h-week-count" class="badge bb">0</div>
+      </div>
+
+      <!-- Week day panels -->
+      <div style="display:flex;flex-direction:column;gap:10px" id="h-week-panels"></div>
+    </div>
+  </div>
+
+  <!-- ── HABIT CHALLENGES ── -->
+  <div style="margin-top:28px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-family:'Instrument Serif',serif;font-size:22px">Défis d'habitudes</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Objectifs sur 30 · 60 · 90 jours — progression dynamique</div>
+      </div>
+      <button class="btn bgh" onclick="toggleChallengeForm()" id="btn-add-challenge">+ Nouveau défi</button>
+    </div>
+
+    <!-- New challenge form (hidden by default) -->
+    <div id="challenge-form" style="display:none;margin-bottom:16px">
+      <div class="card" style="border-color:var(--accent2)">
+        <div class="ct" style="color:var(--accent2)">🎯 Créer un nouveau défi d'habitude</div>
+        <div class="irow" style="flex-wrap:wrap;align-items:flex-end">
+          <input class="inp" id="nc-name" placeholder="Nom du défi…" style="min-width:180px"/>
+          <input class="inp" id="nc-emoji" placeholder="Emoji" style="max-width:64px"/>
+          <select class="sel" id="nc-duration">
+            <option value="7">7 jours</option>
+            <option value="21">21 jours</option>
+            <option value="30" selected>30 jours</option>
+            <option value="60">60 jours</option>
+            <option value="90">90 jours</option>
+            <option value="100">100 jours</option>
+          </select>
+          <input class="inp" id="nc-start" type="date" style="max-width:148px"/>
+          <input class="inp" id="nc-color" type="color" value="#4ade80" style="max-width:48px;padding:4px;cursor:pointer"/>
+          <button class="btn" onclick="addChallenge()">Créer le défi</button>
+          <button class="btn bgh" onclick="toggleChallengeForm()">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge cards grid -->
+    <div id="challenge-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px"></div>
+  </div>
+</div>
+
+<!-- TACHES -->
+<div class="section" id="s-taches">
+  <div class="ptitle">Tâches</div>
+
+  <!-- Add task form -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct">➕ Nouvelle tâche</div>
+    <div class="irow">
+      <input class="inp" id="ni-task-text" placeholder="Description de la tâche…" style="min-width:200px"/>
+      <select class="sel" id="ni-task-prio">
+        <option value="ui">🔴 Urgent & Important</option>
+        <option value="imp">🟡 Important</option>
+        <option value="sec">🟢 Secondaire</option>
+        <option value="att">🕐 En attente</option>
+      </select>
+      <select class="sel" id="ni-task-scope">
+        <option value="day">📌 Aujourd'hui</option>
+        <option value="week">📅 Cette semaine</option>
+      </select>
+      <input class="inp" id="ni-task-dl" type="date" style="max-width:148px" title="Deadline"/>
+      <button class="btn" onclick="addTask()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- TÂCHES DU JOUR -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:'Instrument Serif',serif;font-size:20px">Aujourd'hui</div>
+        <div id="t-day-count" class="badge br">0</div>
+      </div>
+      <div id="t-day-ui" class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--red)">🔴 Urgent &amp; Important</div>
+        <div id="t-day-ui-list"></div>
+      </div>
+      <div id="t-day-imp" class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--amber)">🟡 Important</div>
+        <div id="t-day-imp-list"></div>
+      </div>
+      <div id="t-day-sec" class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--green)">🟢 Secondaire</div>
+        <div id="t-day-sec-list"></div>
+      </div>
+      <div id="t-day-att" class="card">
+        <div class="ct" style="color:var(--text3)">🕐 En attente</div>
+        <div id="t-day-att-list"></div>
+      </div>
+    </div>
+
+    <!-- TÂCHES DE LA SEMAINE -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:'Instrument Serif',serif;font-size:20px">Cette semaine</div>
+        <div id="t-week-count" class="badge bb">0</div>
+      </div>
+      <div class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--red)">🔴 Urgent &amp; Important</div>
+        <div id="t-week-ui-list"></div>
+      </div>
+      <div class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--amber)">🟡 Important</div>
+        <div id="t-week-imp-list"></div>
+      </div>
+      <div class="card" style="margin-bottom:10px">
+        <div class="ct" style="color:var(--green)">🟢 Secondaire</div>
+        <div id="t-week-sec-list"></div>
+      </div>
+      <div class="card">
+        <div class="ct" style="color:var(--text3)">🕐 En attente</div>
+        <div id="t-week-att-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPORT -->
+<div class="section" id="s-sport">
+  <div class="ptitle">Sport <small>PROGRAMME 4 JOURS</small></div>
+
+  <!-- Morning routine banner -->
+  <div id="sp-morning-banner" style="margin-bottom:16px"></div>
+
+  <!-- Day tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="sp-day-tabs">
+    <button class="fbtn" id="sp-tab-0" onclick="spTab(0,this)">Lundi — Push 💪</button>
+    <button class="fbtn" id="sp-tab-1" onclick="spTab(1,this)">Mardi — Pull 🏋️</button>
+    <button class="fbtn" id="sp-tab-2" onclick="spTab(2,this)">Mercredi — Jambes 🦵</button>
+    <button class="fbtn" id="sp-tab-3" onclick="spTab(3,this)">Vendredi — Fullbody 🔥</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div id="sp-day-title" class="ct"></div>
+      <div id="sp-list"></div>
+      <div class="sp"></div>
+      <div class="ct">➕ Ajouter un exercice à ce jour</div>
+      <div class="irow">
+        <input class="inp" id="ni-ex" placeholder="Exercice"/>
+        <input class="inp" id="ni-muscle" placeholder="Muscle" style="max-width:100px"/>
+        <input class="inp" id="ni-sets" placeholder="Séries" style="max-width:65px"/>
+        <input class="inp" id="ni-reps" placeholder="Reps" style="max-width:65px"/>
+        <button class="btn" onclick="addEx()">+</button>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="ct">📅 Planning semaine</div>
+        <div class="wgrid" id="sp-week"></div>
+      </div>
+      <div class="card">
+        <div class="ct">📊 Séances ce mois</div>
+        <div class="mbars" id="sp-mbars"></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:6px"><span>Sem 1</span><span>Sem 2</span><span>Sem 3</span><span>Sem 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discipline chart -->
+  <div class="card" style="margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="ct" style="margin-bottom:0">🏆 Discipline — Respect du programme (8 semaines)</div>
+      <div style="display:flex;gap:10px;font-size:10px;color:var(--text3)">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:4px;vertical-align:middle"></span>Séance faite</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:4px;vertical-align:middle"></span>Séance ratée</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--border2);margin-right:4px;vertical-align:middle"></span>À venir</span>
+      </div>
+    </div>
+    <canvas id="disciplineChart" height="120"></canvas>
+    <div style="display:flex;justify-content:space-between;margin-top:8px" id="disc-stats"></div>
+  </div>
+</div>
+
+<!-- BUDGET -->
+<div class="section" id="s-budget">
+  <div class="ptitle">Finance <small>SALAIRE & RÉPARTITION</small></div>
+
+  <!-- Salary banner -->
+  <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,var(--surface2),var(--surface));border-color:var(--accent2)">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">💼 Salaire mensuel net</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input class="inp" id="ni-salaire" type="number" style="font-family:'Instrument Serif',serif;font-size:34px;font-weight:400;background:transparent;border:none;padding:0;width:140px;color:var(--accent);outline:none" oninput="updateSalary(this.value)"/>
+          <span style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text3)">CHF</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Total alloué</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:24px" id="b-allocated">CHF 0</div>
+        <div style="font-size:11px" id="b-balance"></div>
+      </div>
+    </div>
+    <!-- Allocation visualization bar -->
+    <div style="margin-top:16px">
+      <div style="height:18px;border-radius:99px;overflow:hidden;display:flex;background:var(--border)" id="b-alloc-bar"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:10px" id="b-alloc-legend"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="g4" style="margin-bottom:16px" id="b-stats"></div>
+
+  <!-- ── PATRIMOINE & PROJECTION ── -->
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+    <!-- Patrimoine actuel -->
+    <div class="card">
+      <div class="ct">💎 Mon patrimoine actuel</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;margin:8px 0 14px">
+        <div class="bigscore" id="b-net-worth" style="font-size:48px">—</div>
+        <div style="font-size:12px;color:var(--text3);padding-bottom:8px">CHF<br>fortune totale</div>
+      </div>
+
+      <div style="padding:12px;background:var(--bg2);border-radius:var(--r-sm);margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:18px">💰</span>
+            <span style="font-size:13px;font-weight:600">Épargne</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="ni-epargne" oninput="updatePatrimoine('epargne',this.value)" style="width:90px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 8px;color:var(--green);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
+            <span style="color:var(--text3);font-size:11px">CHF</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--text3)">+ <strong id="b-add-epargne">500</strong> CHF / mois (allocation Épargne)</div>
+      </div>
+
+      <div style="padding:12px;background:var(--bg2);border-radius:var(--r-sm);margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:18px">📈</span>
+            <span style="font-size:13px;font-weight:600">Investissements</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="ni-invest" oninput="updatePatrimoine('investissements',this.value)" style="width:90px;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 8px;color:var(--accent);font-family:'Geist',sans-serif;font-size:14px;font-weight:700;text-align:right;outline:none"/>
+            <span style="color:var(--text3);font-size:11px">CHF</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--text3)">+ <strong id="b-add-invest">400</strong> CHF / mois (allocation Investissements)</div>
+      </div>
+
+      <!-- ── CRYPTO ── -->
+      <div style="padding:12px;background:var(--bg2);border-radius:var(--r-sm);margin-bottom:10px;border:1px solid rgba(196,169,107,0.15)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:18px">🪙</span>
+            <span style="font-size:13px;font-weight:600">Crypto</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span id="b-crypto-total" style="font-family:'Geist',sans-serif;font-size:15px;font-weight:700;color:#f7931a">—</span>
+            <span style="color:var(--text3);font-size:11px">CHF</span>
+          </div>
+        </div>
+
+        <!-- Column headers -->
+        <div style="display:grid;grid-template-columns:56px 1fr 90px 90px 20px;gap:8px;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px;padding:0 2px">
+          <span>Actif</span>
+          <span style="text-align:right">Quantité</span>
+          <span style="text-align:right">Prix (CHF)</span>
+          <span style="text-align:right">Valeur</span>
+          <span></span>
+        </div>
+
+        <!-- Dynamic list -->
+        <div id="crypto-lines" style="display:flex;flex-direction:column;gap:6px"></div>
+
+        <!-- Add new line -->
+        <div style="display:grid;grid-template-columns:56px 1fr 90px 90px 20px;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border2)">
+          <input type="text" id="nc-crypto-symbol" placeholder="SYM" maxlength="6" oninput="this.value=this.value.toUpperCase()" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 6px;color:var(--accent);font-family:'Geist',sans-serif;font-size:11px;font-weight:700;text-align:center;outline:none;text-transform:uppercase"/>
+          <input type="number" step="0.00000001" id="nc-crypto-qty" placeholder="Quantité" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;text-align:right;outline:none;width:100%"/>
+          <input type="number" step="0.01" id="nc-crypto-price" placeholder="Prix CHF" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:var(--accent);font-family:'Geist',sans-serif;font-size:11px;font-weight:600;text-align:right;outline:none;width:100%"/>
+          <button onclick="addCryptoLine()" style="grid-column:span 2;background:var(--accent2);color:#0f0e0c;border:none;border-radius:var(--r-sm);padding:4px 8px;font-family:'Geist',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s">+ Ajouter</button>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:8px;border-top:1px solid var(--border)">
+          <span id="crypto-last" style="font-size:9px;color:var(--text3);font-style:italic">Prix saisis manuellement</span>
+          <span style="font-size:9px;color:var(--text3)">Modifie les prix dès que tu veux</span>
+        </div>
+      </div>
+
+      <!-- Hypothèses de rendement -->
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:8px">Hypothèses de rendement annuel</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+          <span style="font-size:11px;flex:1">📈 Investissements</span>
+          <input type="number" step="0.1" id="ni-rend" oninput="updateRendement(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:var(--accent);font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <span style="font-size:11px;color:var(--text3)">% / an</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+          <span style="font-size:11px;flex:1">🪙 Crypto</span>
+          <input type="number" step="0.1" id="ni-crypto-rend" oninput="updateCryptoRendement(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:#f7931a;font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <span style="font-size:11px;color:var(--text3)">% / an</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span style="font-size:11px;flex:1">💰 Épargne</span>
+          <input type="number" step="0.1" id="ni-int" oninput="updateInteret(this.value)" style="width:60px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:4px 6px;color:var(--green);font-size:11px;font-weight:700;text-align:right;outline:none"/>
+          <span style="font-size:11px;color:var(--text3)">% / an</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projection chart -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="ct" style="margin-bottom:0">📊 Projection de fortune</div>
+        <div style="display:flex;gap:4px" id="b-horizon-tabs">
+          <button class="fbtn" onclick="setHorizon(1,this)">1 an</button>
+          <button class="fbtn" onclick="setHorizon(5,this)">5 ans</button>
+          <button class="fbtn active" onclick="setHorizon(10,this)">10 ans</button>
+          <button class="fbtn" onclick="setHorizon(20,this)">20 ans</button>
+          <button class="fbtn" onclick="setHorizon(30,this)">30 ans</button>
+        </div>
+      </div>
+      <canvas id="patrimoine-chart" height="220"></canvas>
+      <div style="display:flex;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap">
+        <div style="text-align:center;flex:1;min-width:90px">
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Dans <span id="b-h-label">10 ans</span></div>
+          <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--accent)" id="b-h-final">—</div>
+          <div style="font-size:10px;color:var(--text3)">fortune totale</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:90px">
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Total versé</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text2)" id="b-h-versé">—</div>
+          <div style="font-size:10px;color:var(--text3)">de ta poche</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:90px">
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Intérêts générés</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--green)" id="b-h-int">—</div>
+          <div style="font-size:10px;color:var(--text3)">argent gratuit ✨</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- Allocation cards -->
+    <div class="card">
+      <div class="ct">📂 Mes enveloppes — Répartition mensuelle</div>
+      <div id="b-allocs"></div>
+      <div class="sp"></div>
+      <div class="ct">➕ Nouvelle enveloppe</div>
+      <div class="irow">
+        <input class="inp" id="ni-alloc-name" placeholder="Nom (ex: Loyer)"/>
+        <input class="inp" id="ni-alloc-emoji" placeholder="📦" style="max-width:60px"/>
+        <input class="inp" id="ni-alloc-amt" placeholder="CHF" type="number" style="max-width:90px"/>
+        <button class="btn" onclick="addAlloc()">+</button>
+      </div>
+    </div>
+
+    <!-- Recent expenses -->
+    <div class="card">
+      <div class="ct">🧾 Dépenses ce mois</div>
+      <div id="b-trans"></div>
+      <div class="sp"></div>
+      <div class="ct">➕ Nouvelle dépense</div>
+      <div class="irow">
+        <input class="inp" id="ni-desc" placeholder="Description"/>
+        <input class="inp" id="ni-amt" placeholder="CHF" type="number" style="max-width:90px"/>
+        <select class="sel" id="ni-alloc-target"></select>
+        <button class="btn" onclick="addDep()">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIFS -->
+<div class="section" id="s-objectifs">
+  <div class="ptitle">Objectifs</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🎯 En cours</div>
+      <div id="obj-list"></div>
+      <div class="sp"></div>
+      <div class="ct">➕ Nouvel objectif</div>
+      <div class="irow">
+        <input class="inp" id="ni-obj" placeholder="Objectif…"/>
+        <input class="inp" id="ni-ddl" type="date" style="max-width:148px"/>
+        <button class="btn" onclick="addObj()">+</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 Progression globale</div>
+      <div style="text-align:center;padding:20px 0 10px">
+        <div class="bigscore" id="obj-avg">—</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:6px" id="obj-sub">sur 0 objectifs</div>
+      </div>
+      <div class="pbar"><div class="pfill" id="obj-abar" style="width:0%"></div></div>
+      <div class="sp"></div>
+      <div class="ct">📝 Notes</div>
+      <textarea class="inp" id="notes" placeholder="Réflexions du jour…"></textarea>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:10px">
+        <button class="btn bsm" onclick="saveNotes()">Enregistrer</button>
+        <span id="nok" style="font-size:10px;color:var(--green);opacity:0;transition:opacity .3s"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPIRITUALITE -->
+<div class="section" id="s-spiritualite">
+  <div class="ptitle">Spiritualité <small>LES ÉCRITURES</small></div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="stat"><div class="slbl">Bible lue</div><div class="sval" id="bi-pct">0%</div><div class="ssub" id="bi-chap">0 / 1189 ch.</div></div>
+    <div class="stat"><div class="slbl">Livres commencés</div><div class="sval" id="bi-start">0</div><div class="ssub">sur 66 livres</div></div>
+    <div class="stat"><div class="slbl">Livres terminés</div><div class="sval" id="bi-done">0</div><div class="ssub">sur 66 livres</div></div>
+    <div class="stat"><div class="slbl">Dernière lecture</div><div class="sval" style="font-size:15px" id="bi-last">—</div><div class="ssub" id="bi-ld">—</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ct" style="margin-bottom:0">📖 Progression globale des Écritures</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:24px;color:var(--purple)" id="bi-bigpct">0%</div>
+    </div>
+    <div style="height:10px;background:var(--border);border-radius:99px;overflow:hidden">
+      <div id="bi-bar" style="height:100%;background:linear-gradient(90deg,var(--purple),#c084fc);border-radius:99px;width:0%;transition:width .6s ease"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:6px"><span>Genèse</span><span>← Ancien Testament</span><span>Nouveau Testament →</span><span>Apocalypse</span></div>
+  </div>
+  <div class="frow">
+    <button class="fbtn active" onclick="biF('all',this)">Tous (66)</button>
+    <button class="fbtn" onclick="biF('at',this)">Ancien Testament (39)</button>
+    <button class="fbtn" onclick="biF('nt',this)">Nouveau Testament (27)</button>
+    <button class="fbtn" onclick="biF('done',this)">Terminés</button>
+    <button class="fbtn" onclick="biF('progress',this)">En cours</button>
+    <button class="fbtn bdng" style="margin-left:auto" onclick="biReset()">Réinitialiser</button>
+  </div>
+  <div id="bible-grid"></div>
+</div>
+
+</main>
+
+<script>
+// ══ STATE ══
+let S={
+  habits:[
+    // ── Quotidiennes — jours de sport seulement (Lun=0, Mar=1, Mer=2, Ven=4) ──
+    {id:1, name:'Réveil 5h30',              emoji:'⏰', done:false, streak:12, days:[0,1,2,4], scope:'day'},
+    {id:5, name:'Séance sport (5h30)',       emoji:'💪', done:false, streak:5,  days:[0,1,2,4], scope:'day'},
+    // ── Veille de séance : coucher 22h45 (Dim=6, Lun=0, Mar=1, Mer=2) ──
+    {id:14,name:'Coucher à 22h45',          emoji:'😴', done:false, streak:0,  days:[6,0,1,2],  scope:'day'},
+    // ── Quotidiennes tous les jours ──
+    {id:3, name:'Lire 1 chapitre de la Bible',emoji:'📖',done:false, streak:5,  days:[],        scope:'day'},
+    {id:15,name:'Texte du jour',             emoji:'🌅', done:false, streak:0,  days:[],        scope:'day'},
+    {id:4, name:'Prière du matin',           emoji:'🙏', done:false, streak:15, days:[],        scope:'day'},
+    {id:12,name:'Manger 2 œufs',            emoji:'🥚', done:false, streak:0,  days:[],        scope:'day'},
+    {id:16,name:'Prendre mes protéines',     emoji:'🥛', done:false, streak:0,  days:[],        scope:'day'},
+    {id:17,name:'Calculer mes calories',     emoji:'🔢', done:false, streak:0,  days:[],        scope:'day'},
+    {id:13,name:'Dormir 7h / nuit',         emoji:'🌙', done:false, streak:0,  days:[],        scope:'day'},
+    {id:2, name:'Douche froide',             emoji:'🧊', done:false, streak:8,  days:[],        scope:'day'},
+    {id:6, name:'10 000 pas',               emoji:'🚶', done:false, streak:20, days:[],        scope:'day'},
+    {id:7, name:'Boire suffisamment',        emoji:'💧', done:false, streak:3,  days:[],        scope:'day'},
+    {id:8, name:'Alimentation saine',        emoji:'🥗', done:false, streak:7,  days:[],        scope:'day'},
+    {id:9, name:'Pas de réseaux le soir',    emoji:'📵', done:false, streak:2,  days:[],        scope:'day'},
+    // ── Hebdomadaires ──
+    {id:18,name:'Préparer ma réunion (x2)',  emoji:'📋', done:false, streak:0,  days:[0,3],     scope:'week'},
+    {id:19,name:'Sortir en prédication (x2)',emoji:'🗣️', done:false, streak:0,  days:[2,5],     scope:'week'},
+    {id:10,name:'Réunion de groupe',         emoji:'👥', done:false, streak:4,  days:[2],       scope:'week'},
+    {id:11,name:'Bilan de semaine',          emoji:'📝', done:false, streak:3,  days:[6],       scope:'week'},
+  ],
+  // habit challenges: 30/60/90-day habit goals
+  // checkins: array of date strings "YYYY-MM-DD" when checked in
+  habitChallenges:[
+    {id:1,name:'No junk food',emoji:'🥗',duration:30,startDate:'2026-04-03',checkins:['2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-04-07','2026-04-08','2026-04-09','2026-04-10','2026-04-11','2026-04-12','2026-04-13','2026-04-14','2026-04-15','2026-04-16','2026-04-17','2026-04-18','2026-04-19','2026-04-20','2026-04-21','2026-04-22','2026-04-23','2026-04-24','2026-04-25','2026-04-26','2026-04-27','2026-04-28'],color:'#4ade80'},
+    {id:2,name:'Méditation 10mn',emoji:'🧘',duration:60,startDate:'2026-03-25',checkins:['2026-03-25','2026-03-26','2026-03-27','2026-03-28','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-05','2026-04-06','2026-04-08','2026-04-09','2026-04-10','2026-04-12','2026-04-14','2026-04-15','2026-04-16','2026-04-17','2026-04-19','2026-04-20','2026-04-21','2026-04-22','2026-04-23','2026-04-25','2026-04-26','2026-04-27','2026-04-28','2026-04-29','2026-04-30','2026-05-01','2026-05-02','2026-05-03'],color:'#a78bfa'},
+    {id:3,name:'Réveil 5h30',emoji:'⏰',duration:90,startDate:'2026-02-01',checkins:['2026-02-01','2026-02-03','2026-02-04','2026-02-05','2026-02-06','2026-02-08','2026-02-10','2026-02-11','2026-02-12','2026-02-14','2026-02-15','2026-02-17','2026-02-18','2026-02-19','2026-02-20','2026-02-22','2026-02-23','2026-02-24','2026-02-25','2026-02-26','2026-03-01','2026-03-02','2026-03-03','2026-03-04','2026-03-05','2026-03-07','2026-03-08','2026-03-09','2026-03-10','2026-03-11','2026-03-13','2026-03-14','2026-03-15','2026-03-17','2026-03-18','2026-03-20','2026-03-21','2026-03-22','2026-03-24','2026-03-25','2026-03-27','2026-03-28','2026-03-29','2026-03-30','2026-04-01','2026-04-02','2026-04-03','2026-04-05','2026-04-07','2026-04-08'],color:'#fbbf24'},
+  ],
+  nextChallengeId:10,
+  // 21 jours: [habPct, sport0/1, lecture0/1]
+  hist:[
+    [10,0,0],[22,0,1],[30,1,0],[42,1,1],[45,0,1],[44,1,0],
+    [56,1,1],[55,0,0],[65,1,1],[63,1,0],[70,0,1],[80,1,1],
+    [75,1,0],[82,1,1],[78,0,1],[85,1,1],[83,1,0],[80,1,1],
+    [70,0,0],[55,1,0],[0,0,0]
+  ],
+  tasks:[
+    {id:1,text:'Envoyer le rapport mensuel',prio:'ui',scope:'day',dl:'2026-05-03',done:false},
+    {id:2,text:'Répondre à Théo',prio:'ui',scope:'day',dl:'2026-05-03',done:true},
+    {id:3,text:'Préparer la réunion',prio:'imp',scope:'week',dl:'2026-05-07',done:false},
+    {id:4,text:'Étudier les Proverbes ch.3',prio:'imp',scope:'week',dl:'2026-05-09',done:false},
+    {id:5,text:'Commander des fournitures',prio:'sec',scope:'week',dl:'',done:true},
+    {id:6,text:'Appeler Florent',prio:'sec',scope:'week',dl:'2026-05-10',done:false},
+    {id:7,text:'Attendre confirmation commande',prio:'att',scope:'week',dl:'',done:false},
+  ],
+  activeDay:0, // 0=lundi,1=mardi,2=mercredi,3=vendredi
+  program:[
+    // LUNDI — POUSSER (Push)
+    {day:0,muscle:'Pectoraux',name:'Développé couché haltères',s:4,r:'8-12',done:false,id:101},
+    {day:0,muscle:'Pectoraux',name:'Développé incliné haltères',s:3,r:'10-12',done:false,id:102},
+    {day:0,muscle:'Pectoraux',name:'Écartés cables / élastiques',s:3,r:'12-15',done:false,id:103},
+    {day:0,muscle:'Épaules',name:'Élévations latérales haltères',s:4,r:'12-15',done:false,id:104},
+    {day:0,muscle:'Épaules',name:'Développé militaire haltères',s:3,r:'8-10',done:false,id:105},
+    {day:0,muscle:'Épaules',name:'Élévations frontales / face pull',s:3,r:'12-15',done:false,id:106},
+    {day:0,muscle:'Triceps',name:'Pushdown câble',s:3,r:'12-15',done:false,id:107},
+    {day:0,muscle:'Triceps',name:'Dips / extensions triceps',s:3,r:'10-12',done:false,id:108},
+    // MARDI — TIRER (Pull)
+    {day:1,muscle:'Dos',name:'Soulevé de terre roumain',s:4,r:'6-8',done:false,id:201},
+    {day:1,muscle:'Dos',name:'Tirage horizontal / rowing barre',s:4,r:'8-12',done:false,id:202},
+    {day:1,muscle:'Dos',name:'Tirage vertical (lat machine)',s:3,r:'10-12',done:false,id:203},
+    {day:1,muscle:'Arrière d\'épaule',name:'Face pull câble',s:3,r:'15-20',done:false,id:204},
+    {day:1,muscle:'Arrière d\'épaule',name:'Oiseau / élévations arrière',s:3,r:'12-15',done:false,id:205},
+    {day:1,muscle:'Biceps',name:'Curl barre droite',s:3,r:'8-12',done:false,id:206},
+    {day:1,muscle:'Biceps',name:'Curl haltères alterné',s:3,r:'10-12',done:false,id:207},
+    // MERCREDI — JAMBES
+    {day:2,muscle:'Quadriceps',name:'Leg press',s:4,r:'10-15',done:false,id:301},
+    {day:2,muscle:'Quadriceps',name:'Extension jambes machine',s:3,r:'12-15',done:false,id:302},
+    {day:2,muscle:'Quadriceps',name:'Hack squat / goblet squat',s:3,r:'10-12',done:false,id:303},
+    {day:2,muscle:'Arrière de cuisse',name:'Leg curl couché',s:4,r:'10-12',done:false,id:304},
+    {day:2,muscle:'Arrière de cuisse',name:'Roumain haltères / good morning',s:3,r:'10-12',done:false,id:305},
+    {day:2,muscle:'Adducteurs & mollets',name:'Machine adducteurs',s:3,r:'15-20',done:false,id:306},
+    {day:2,muscle:'Adducteurs & mollets',name:'Élévations mollets machine',s:4,r:'15-20',done:false,id:307},
+    // VENDREDI — FULLBODY
+    {day:3,muscle:'Jambes',name:'Squat barre',s:4,r:'6-8',done:false,id:401},
+    {day:3,muscle:'Jambes',name:'Fentes / step-up',s:3,r:'10-12',done:false,id:402},
+    {day:3,muscle:'Dos',name:'Rowing barre penché',s:4,r:'8-10',done:false,id:403},
+    {day:3,muscle:'Dos',name:'Tirage câble assis',s:3,r:'10-12',done:false,id:404},
+    {day:3,muscle:'Adducteurs & mollets',name:'Machine adducteurs',s:3,r:'15',done:false,id:405},
+    {day:3,muscle:'Adducteurs & mollets',name:'Élévations mollets assis',s:3,r:'15-20',done:false,id:406},
+  ],
+  wdays:[0,1,2,4], // lun, mar, mer, ven
+  // discipline: 8 semaines × 4 jours [lun,mar,mer,ven] true/false/null
+  discipline:[
+    [true,true,false,true],
+    [true,true,true,true],
+    [false,true,true,false],
+    [true,true,true,true],
+    [true,false,true,true],
+    [true,true,true,false],
+    [true,true,true,true],
+    [null,null,null,null], // semaine en cours
+  ],
+  spHist:[4,5,3,2],
+  // Budget : salaire + répartition (enveloppes)
+  salaire: 1600,
+  // Patrimoine actuel (point de départ)
+  patrimoine: {
+    epargne: 2500,        // épargne actuelle
+    investissements: 15500, // investissements actuels
+    rendementAnnuel: 6,   // % rendement annuel moyen sur les investissements
+    interetEpargne: 0.5,  // % intérêt annuel épargne
+  },
+  // Crypto : holdings & prix en CHF (saisis manuellement)
+  crypto: {
+    // Liste dynamique — ajoute/supprime des lignes librement
+    lines: [
+      { id: 1, symbol: 'BTC', name: 'Bitcoin',  color: '#f7931a', qty: 0, price: 48000 },
+      { id: 2, symbol: 'ETH', name: 'Ethereum', color: '#627eea', qty: 0, price: 1800  },
+      { id: 3, symbol: 'SOL', name: 'Solana',   color: '#9945ff', qty: 0, price: 60    },
+    ],
+    nextId: 100,
+    lastUpdate: null, // timestamp ISO de la dernière modification
+    rendementAnnuel: 15, // % projeté (crypto : volatile, hypothèse conservatrice)
+  },
+  horizon: 10, // années de projection
+  allocations: [
+    {id:1, name:'UBS Equate Plus', emoji:'🏦', amount:150, color:'#60a5fa'},
+    {id:2, name:'Food activities',  emoji:'🍽️', amount:400, color:'#fbbf24'},
+    {id:3, name:'Épargne',          emoji:'💰', amount:500, color:'#4ade80'},
+    {id:4, name:'Vacances',         emoji:'✈️', amount:100, color:'#a78bfa'},
+    {id:5, name:'Investissements',  emoji:'📈', amount:400, color:'#c4a96b'},
+    {id:6, name:'Contributions JW', emoji:'🤝', amount:20,  color:'#f87171'},
+  ],
+  nextAllocId: 10,
+  // Dépenses (suivi des sorties par enveloppe)
+  deps:[
+    {id:1, desc:'Repas resto', amt:45.00, allocId:2, dt:'2026-04-15'},
+    {id:2, desc:'Transfert épargne', amt:500.00, allocId:3, dt:'2026-04-25'},
+    {id:3, desc:'Contribution mensuelle', amt:20.00, allocId:6, dt:'2026-04-28'},
+  ],
+  blimit:2500,
+  objs:[
+    {id:1,name:'Courir 10 km sans pause',emoji:'🏃',p:60,dl:'2026-06-30'},
+    {id:2,name:'Épargner 6000 CHF cette année',emoji:'💰',p:35,dl:'2026-12-31'},
+    {id:3,name:'Investir 4800 CHF cette année',emoji:'📈',p:30,dl:'2026-12-31'},
+    {id:4,name:'Lire 1 chapitre de la Bible par jour',emoji:'📖',p:15,dl:'2026-12-31'},
+    {id:5,name:'Mémoriser 10 versets',emoji:'🧠',p:20,dl:'2026-08-01'},
+    {id:6,name:'Terminer la Bible entière',emoji:'📜',p:2,dl:'2027-12-31'},
+    {id:7,name:'Séjour JUNA à New York',emoji:'🗽',p:10,dl:'2027-06-30'},
+  ],
+  notes:'',
+  bif:'all',biLast:null,biLD:null,
+  nid:30,
+  bible:[
+    {id:'gen',n:'Genèse',t:'at',ch:50,r:0},{id:'ex',n:'Exode',t:'at',ch:40,r:0},
+    {id:'lev',n:'Lévitique',t:'at',ch:27,r:0},{id:'nb',n:'Nombres',t:'at',ch:36,r:0},
+    {id:'dt',n:'Deutéronome',t:'at',ch:34,r:0},{id:'jos',n:'Josué',t:'at',ch:24,r:0},
+    {id:'jg',n:'Juges',t:'at',ch:21,r:0},{id:'rt',n:'Ruth',t:'at',ch:4,r:0},
+    {id:'1s',n:'1 Samuel',t:'at',ch:31,r:0},{id:'2s',n:'2 Samuel',t:'at',ch:24,r:0},
+    {id:'1r',n:'1 Rois',t:'at',ch:22,r:0},{id:'2r',n:'2 Rois',t:'at',ch:25,r:0},
+    {id:'1ch',n:'1 Chroniques',t:'at',ch:29,r:0},{id:'2ch',n:'2 Chroniques',t:'at',ch:36,r:0},
+    {id:'esd',n:'Esdras',t:'at',ch:10,r:0},{id:'neh',n:'Néhémie',t:'at',ch:13,r:0},
+    {id:'est',n:'Esther',t:'at',ch:10,r:0},{id:'job',n:'Job',t:'at',ch:42,r:0},
+    {id:'ps',n:'Psaumes',t:'at',ch:150,r:0},{id:'pr',n:'Proverbes',t:'at',ch:31,r:0},
+    {id:'qo',n:'Ecclésiaste',t:'at',ch:12,r:0},{id:'ct',n:'Cantique',t:'at',ch:8,r:0},
+    {id:'es',n:'Ésaïe',t:'at',ch:66,r:0},{id:'jr',n:'Jérémie',t:'at',ch:52,r:0},
+    {id:'lm',n:'Lamentations',t:'at',ch:5,r:0},{id:'ez',n:'Ézéchiel',t:'at',ch:48,r:0},
+    {id:'dn',n:'Daniel',t:'at',ch:12,r:0},{id:'os',n:'Osée',t:'at',ch:14,r:0},
+    {id:'jl',n:'Joël',t:'at',ch:3,r:0},{id:'am',n:'Amos',t:'at',ch:9,r:0},
+    {id:'ab',n:'Abdias',t:'at',ch:1,r:0},{id:'jon',n:'Jonas',t:'at',ch:4,r:0},
+    {id:'mi',n:'Michée',t:'at',ch:7,r:0},{id:'na',n:'Nahum',t:'at',ch:3,r:0},
+    {id:'hab',n:'Habacuc',t:'at',ch:3,r:0},{id:'so',n:'Sophonie',t:'at',ch:3,r:0},
+    {id:'ag',n:'Aggée',t:'at',ch:2,r:0},{id:'za',n:'Zacharie',t:'at',ch:14,r:0},
+    {id:'ml',n:'Malachie',t:'at',ch:4,r:0},
+    {id:'mt',n:'Matthieu',t:'nt',ch:28,r:0},{id:'mc',n:'Marc',t:'nt',ch:16,r:0},
+    {id:'lc',n:'Luc',t:'nt',ch:24,r:0},{id:'jn',n:'Jean',t:'nt',ch:21,r:0},
+    {id:'ac',n:'Actes',t:'nt',ch:28,r:0},{id:'rm',n:'Romains',t:'nt',ch:16,r:0},
+    {id:'1co',n:'1 Corinthiens',t:'nt',ch:16,r:0},{id:'2co',n:'2 Corinthiens',t:'nt',ch:13,r:0},
+    {id:'ga',n:'Galates',t:'nt',ch:6,r:0},{id:'ep',n:'Éphésiens',t:'nt',ch:6,r:0},
+    {id:'ph',n:'Philippiens',t:'nt',ch:4,r:0},{id:'col',n:'Colossiens',t:'nt',ch:4,r:0},
+    {id:'1th',n:'1 Thessaloniciens',t:'nt',ch:5,r:0},{id:'2th',n:'2 Thessaloniciens',t:'nt',ch:3,r:0},
+    {id:'1tm',n:'1 Timothée',t:'nt',ch:6,r:0},{id:'2tm',n:'2 Timothée',t:'nt',ch:4,r:0},
+    {id:'tt',n:'Tite',t:'nt',ch:3,r:0},{id:'phm',n:'Philémon',t:'nt',ch:1,r:0},
+    {id:'he',n:'Hébreux',t:'nt',ch:13,r:0},{id:'jc',n:'Jacques',t:'nt',ch:5,r:0},
+    {id:'1p',n:'1 Pierre',t:'nt',ch:5,r:0},{id:'2p',n:'2 Pierre',t:'nt',ch:3,r:0},
+    {id:'1jn',n:'1 Jean',t:'nt',ch:5,r:0},{id:'2jn',n:'2 Jean',t:'nt',ch:1,r:0},
+    {id:'3jn',n:'3 Jean',t:'nt',ch:1,r:0},{id:'jude',n:'Jude',t:'nt',ch:1,r:0},
+    {id:'ap',n:'Apocalypse',t:'nt',ch:22,r:0},
+  ]
+};
+
+// ══ NAV ══
+function go(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  btn.classList.add('active');
+  renderAll();
+}
+
+// ══ DATE ══
+function initDate(){
+  const n=new Date();
+  const D=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const M=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.getElementById('hdate').textContent=D[n.getDay()]+' '+n.getDate()+' '+M[n.getMonth()]+' '+n.getFullYear();
+  document.getElementById('ov-day').textContent=D[n.getDay()].toUpperCase();
+}
+
+// ══ HELPERS ══
+function hs(){
+  const ti=new Date().getDay()===0?6:new Date().getDay()-1;
+  const todayH=S.habits.filter(h=>!h.days||h.days.length===0||h.days.includes(ti));
+  const d=todayH.filter(h=>h.done).length;
+  return{d,t:todayH.length,p:todayH.length?Math.round(d/todayH.length*100):0};
+}
+function totalDeps(){return S.deps.reduce((a,d)=>a+d.amt,0);}
+const CE={Loyer:'🏠',Alimentation:'🥗',Transport:'🚌',Divertissements:'🎬',Santé:'❤️',Abonnements:'🔄',Autre:'📦'};
+function dlLabel(dl){
+  if(!dl) return '';
+  const today=new Date(); today.setHours(0,0,0,0);
+  const d=new Date(dl); d.setHours(0,0,0,0);
+  const diff=Math.round((d-today)/(1000*60*60*24));
+  if(diff<0) return `<span class="badge br">En retard</span>`;
+  if(diff===0) return `<span class="badge br">Aujourd'hui</span>`;
+  if(diff===1) return `<span class="badge ba">Demain</span>`;
+  if(diff<=7) return `<span class="badge ba">J+${diff}</span>`;
+  return `<span class="badge bm">${d.toLocaleDateString('fr-CH',{day:'numeric',month:'short'})}</span>`;
+}
+
+// ══ CHART ══
+function drawChart(){
+  const cv=document.getElementById('rchart');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.parentElement.clientWidth-40,H=160;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
+  const D=S.hist,n=D.length;
+  const pL=28,pR=10,pT=12,pB=28,cW=W-pL-pR,cH=H-pT-pB;
+  ctx.clearRect(0,0,W,H);
+  // grid
+  for(let i=0;i<=4;i++){
+    const y=pT+cH*(1-i/4);
+    ctx.beginPath();ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;
+    ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
+    ctx.fillStyle='rgba(90,86,80,0.7)';ctx.font='9px sans-serif';ctx.textAlign='right';
+    ctx.fillText((i*25)+'%',pL-4,y+3);
+  }
+  const xP=i=>pL+(i/(n-1))*cW;
+  // sport bars
+  const bW=cW/(n-1)*0.5;
+  D.forEach((d,i)=>{
+    if(d[1]){ctx.fillStyle='rgba(74,222,128,0.08)';ctx.fillRect(xP(i)-bW/2,pT,bW,cH);}
+  });
+  // lecture dots
+  D.forEach((d,i)=>{
+    if(d[2]){ctx.beginPath();ctx.arc(xP(i),H-pB+14,3.5,0,Math.PI*2);ctx.fillStyle='rgba(167,139,250,0.85)';ctx.fill();}
+  });
+  // area fill
+  ctx.save();ctx.beginPath();
+  D.forEach((d,i)=>{const x=xP(i),y=pT+cH*(1-d[0]/100);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.lineTo(xP(n-1),pT+cH);ctx.lineTo(xP(0),pT+cH);ctx.closePath();
+  const gr=ctx.createLinearGradient(0,pT,0,pT+cH);
+  gr.addColorStop(0,'rgba(196,169,107,0.18)');gr.addColorStop(1,'rgba(196,169,107,0)');
+  ctx.fillStyle=gr;ctx.fill();ctx.restore();
+  // line
+  ctx.beginPath();
+  D.forEach((d,i)=>{const x=xP(i),y=pT+cH*(1-d[0]/100);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.strokeStyle='rgba(196,169,107,0.6)';ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();
+  // dots
+  D.forEach((d,i)=>{
+    const x=xP(i),y=pT+cH*(1-d[0]/100),last=i===n-1;
+    ctx.beginPath();ctx.arc(x,y,last?5:2.5,0,Math.PI*2);
+    ctx.fillStyle=last?'#c4a96b':'rgba(196,169,107,0.6)';ctx.fill();
+    if(last){ctx.fillStyle='rgba(232,213,163,0.9)';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(d[0]+'%',x,y-9);}
+  });
+  // x labels
+  [[0,'J-20'],[7,'J-13'],[14,'J-6'],[20,'Auj.']].forEach(([li,lb])=>{
+    ctx.fillStyle='rgba(90,86,80,0.8)';ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(lb,xP(li),H-pB+26);
+  });
+}
+
+// ══ RENDER OVERVIEW ══
+function rOverview(){
+  const h=hs(),allT=S.tasks;
+  const dT=allT.filter(t=>t.done).length;
+  const totalAlloc=S.allocations.reduce((a,x)=>a+x.amount,0);
+  const totalSpent=S.deps.reduce((a,d)=>a+d.amt,0);
+  const sp=totalSpent,rem=S.salaire-totalAlloc;
+  const biT=S.bible.reduce((a,b)=>a+b.r,0),biP=((biT/1189)*100).toFixed(1);
+  document.getElementById('ov-h').textContent=h.d+'/'+h.t;
+  document.getElementById('ov-t').textContent=dT+'/'+allT.length;
+  document.getElementById('ov-b').textContent='CHF '+S.salaire;
+  const ovBSub=document.getElementById('ov-b-sub');
+  if(ovBSub){
+    if(rem===0) ovBSub.innerHTML='<span style="color:var(--green)">✓ équilibré</span>';
+    else if(rem>0) ovBSub.innerHTML='<span style="color:var(--amber)">CHF '+rem+' libres</span>';
+    else ovBSub.innerHTML='<span style="color:var(--red)">⚠ -CHF '+Math.abs(rem)+'</span>';
+  }
+  document.getElementById('ov-score').textContent=h.p+'%';
+
+  // Today's workout
+  const todayWeekday=new Date().getDay();
+  const todayProgramDay=todayWeekday===1?0:todayWeekday===2?1:todayWeekday===3?2:todayWeekday===5?3:-1;
+  const todayMeta=todayProgramDay>=0?DAY_META[todayProgramDay]:null;
+  document.getElementById('ov-seance').textContent=todayMeta?todayMeta.icon+' '+todayMeta.label.split('—')[1].trim():'Repos';
+  document.getElementById('ov-seance').style.color=todayMeta?todayMeta.color:'var(--text3)';
+  document.getElementById('ov-seance-sub').textContent=todayMeta?'Réveil 5h30 · '+todayMeta.desc.split('·')[0].trim():'Récupération';
+
+  // Morning routine banner on overview
+  document.getElementById('ov-morning').innerHTML=todayMeta?`
+    <div style="background:linear-gradient(135deg,var(--surface2),var(--surface));border:1px solid var(--border2);border-radius:var(--r);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">⏰ Morning Routine d'aujourd'hui</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span style="background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber);font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">5h30 Réveil</span>
+          <span style="color:var(--text3)">→</span>
+          <span style="background:var(--purple-bg);border:1px solid var(--purple);color:var(--purple);font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">Prière & Lecture</span>
+          <span style="color:var(--text3)">→</span>
+          <span style="background:${todayMeta.color}22;border:1px solid ${todayMeta.color};color:${todayMeta.color};font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">6h00 ${todayMeta.icon} ${todayMeta.label}</span>
+        </div>
+      </div>
+      <div style="font-family:'Instrument Serif',serif;font-size:13px;color:var(--text3);font-style:italic">Lun · Mar · Mer · Ven</div>
+    </div>`:
+    `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 22px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:20px">😴</span>
+      <div><div style="font-size:13px;font-weight:500">Pas de séance aujourd'hui</div>
+      <div style="font-size:11px;color:var(--text3)">Récupération active — marche, étirements, lecture des Écritures</div></div>
+    </div>`;
+
+  const ti2=todayDayIdx();
+  document.getElementById('ov-hlist').innerHTML=habitsForDay(ti2).slice(0,5).map(hb=>`
+    <div class="hrow"><div class="chk sm ${hb.done?'on':''}" onclick="toggleH(${hb.id})">${hb.done?'✓':''}</div>
+    <div class="hname" style="font-size:12px">${hb.emoji} ${hb.name}</div></div>`).join('');
+
+  // ── DEMAIN ──
+  const tomorrowDayIdx=(new Date().getDay()+1)%7; // 0=dim
+  const tmrProgramDay=tomorrowDayIdx===1?0:tomorrowDayIdx===2?1:tomorrowDayIdx===3?2:tomorrowDayIdx===5?3:-1;
+  const tmrMeta=tmrProgramDay>=0?DAY_META[tmrProgramDay]:null;
+  const tmrDayNames=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const tmrName=tmrDayNames[tomorrowDayIdx];
+  const tmrTasks=S.tasks.filter(t=>!t.done&&t.dl);
+  // tasks due tomorrow or overdue
+  const tmrDate=new Date(); tmrDate.setDate(tmrDate.getDate()+1); tmrDate.setHours(0,0,0,0);
+  const tasksDueSoon=S.tasks.filter(t=>{
+    if(t.done||!t.dl) return false;
+    const d=new Date(t.dl); d.setHours(0,0,0,0);
+    return d<=tmrDate;
+  });
+  const tmrSportSection=tmrMeta?`
+    <div style="margin-bottom:12px;padding:10px 12px;background:${tmrMeta.color}15;border:1px solid ${tmrMeta.color}40;border-radius:8px">
+      <div style="font-size:10px;font-weight:700;color:${tmrMeta.color};text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">⏰ 5h30 — ${tmrMeta.icon} ${tmrMeta.label}</div>
+      <div style="font-size:11px;color:var(--text3)">${tmrMeta.desc}</div>
+    </div>`:'';
+  const tmrHabitsSection=`
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Routines habituelles</div>
+      ${habitsForDay(tomorrowDayIdx).slice(0,4).map(hb=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:var(--text2)">
+        <div style="width:5px;height:5px;border-radius:50%;background:var(--border2)"></div>
+        ${hb.emoji} ${hb.name}
+      </div>`).join('')}
+      ${habitsForDay(tomorrowDayIdx).length>4?`<div style="font-size:11px;color:var(--text3);margin-top:4px">+${habitsForDay(tomorrowDayIdx).length-4} autres habitudes…</div>`:''}
+    </div>`;
+  const tmrTasksSection=tasksDueSoon.length?`
+    <div>
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Tâches à traiter</div>
+      ${tasksDueSoon.slice(0,3).map(t=>{
+        const prioBadge={ui:'br',imp:'ba',sec:'bm',att:'bm'}[t.prio]||'bm';
+        return `<div style="display:flex;align-items:center;gap:7px;padding:4px 0;font-size:12px">
+          <div style="width:5px;height:5px;border-radius:50%;background:var(--accent2);flex-shrink:0"></div>
+          <span style="flex:1;color:var(--text2)">${t.text}</span>
+          ${dlLabel(t.dl)}
+        </div>`;
+      }).join('')}
+      ${tasksDueSoon.length>3?`<div style="font-size:11px;color:var(--text3);margin-top:4px">+${tasksDueSoon.length-3} autre(s)…</div>`:''}
+    </div>`:'';
+  // ── Progression si objectif atteint demain ──
+  // Each active objective: show current % and projected % if they do +1 session tomorrow
+  // Projection: sport day tomorrow = +5%, habit day = +2% per active obj
+  const progressionGain = tmrMeta ? 5 : 2; // more gain on sport days
+  const activeObjs = S.objs.filter(o => o.p < 100);
+  const tmrProgressSection = activeObjs.length ? `
+    <div style="margin-top:0;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">📈 Ta progression si tu respectes demain</div>
+      ${activeObjs.map(o => {
+        const projected = Math.min(100, o.p + progressionGain);
+        const gain = projected - o.p;
+        return `<div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <span style="font-size:12px;color:var(--text2)">${o.emoji} ${o.name}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;color:var(--text3)">${o.p}%</span>
+              <span style="font-size:10px;color:var(--text3)">→</span>
+              <span style="font-size:13px;font-weight:700;color:var(--green)">${projected}%</span>
+              <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--green-bg);color:var(--green);border:1px solid #0a2a10">+${gain}%</span>
+            </div>
+          </div>
+          <div style="position:relative;height:5px;background:var(--border);border-radius:99px;overflow:visible">
+            <div style="height:100%;width:${o.p}%;background:var(--accent2);border-radius:99px;transition:width .5s"></div>
+            <div style="position:absolute;top:0;left:${o.p}%;height:100%;width:${gain}%;background:var(--green);border-radius:0 99px 99px 0;opacity:.6"></div>
+          </div>
+        </div>`;
+      }).join('')}
+      <div style="font-size:10px;color:var(--text3);margin-top:6px;font-style:italic">La partie verte montre le gain projeté si tu fais ta séance.</div>
+    </div>` : '';
+
+  document.getElementById('ov-tomorrow').innerHTML=`
+    <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span>🌙 Demain —</span>
+      <span style="color:var(--accent);font-family:'Instrument Serif',serif;font-size:14px;font-weight:400;text-transform:none;letter-spacing:0">${tmrName}</span>
+      ${tmrMeta?`<span style="font-size:9px;padding:2px 8px;border-radius:99px;background:${tmrMeta.color}22;color:${tmrMeta.color};font-weight:700">${tmrMeta.icon} Séance</span>`:'<span class="badge bm">Repos 😴</span>'}
+    </div>
+    ${tmrSportSection}
+    ${tmrHabitsSection}
+    ${tasksDueSoon.length ? tmrTasksSection : ''}
+    ${tmrProgressSection}
+  `;
+
+  // Tasks & objectives for left column
+  document.getElementById('ov-tlist').innerHTML=[...S.tasks].filter(t=>t.prio==='ui'||t.prio==='imp').slice(0,6).map(t=>`
+    <div class="trow"><div class="chk sm ${t.done?'on':''}" onclick="toggleT(${t.id})">${t.done?'✓':''}</div>
+    <div class="ttext ${t.done?'done':''}" style="font-size:12px">${t.text}</div>${t.dl?dlLabel(t.dl):''}</div>`).join('')
+    || '<div style="color:var(--text3);font-size:12px;padding:6px 0">Aucune tâche prioritaire</div>';
+
+  document.getElementById('ov-olist').innerHTML=S.objs.slice(0,5).map(o=>`
+    <div class="objrow"><div class="objhead">
+      <div class="objname" style="font-size:12px">${o.emoji} ${o.name}</div>
+      <div class="objpct" style="font-size:14px">${o.p}%</div>
+    </div>
+    <div class="pbar"><div class="pfill" style="width:${o.p}%"></div></div></div>`).join('');
+
+  S.hist[S.hist.length-1][0]=h.p;
+  drawChart();
+}
+
+// ══ RENDER HABITUDES ══
+const DAY_NAMES_FULL=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const DAY_NAMES_SHORT=['L','M','M','J','V','S','D'];
+
+function todayDayIdx(){ return new Date().getDay()===0?6:new Date().getDay()-1; }
+
+// Returns habits active on a given day index (0=Mon..6=Sun)
+function habitsForDay(dayIdx){
+  return S.habits.filter(h=>{
+    if(!h.days||h.days.length===0) return true; // every day
+    return h.days.includes(dayIdx);
+  });
+}
+
+function rHabits(){
+  const ti=todayDayIdx();
+  const todayHabits=habitsForDay(ti);
+  const done=todayHabits.filter(h=>h.done).length;
+  const pct=todayHabits.length?Math.round(done/todayHabits.length*100):0;
+
+  // Score badge
+  const sc=document.getElementById('h-day-score');
+  if(sc) sc.textContent=done+' / '+todayHabits.length;
+
+  // Today list
+  const dl=document.getElementById('h-day-list');
+  if(dl) dl.innerHTML=todayHabits.length
+    ? todayHabits.map(hb=>{
+        const daysLabel=hb.days&&hb.days.length>0
+          ? `<span style="font-size:9px;color:var(--text3);margin-left:4px">${hb.days.map(d=>DAY_NAMES_SHORT[d]).join('·')}</span>`
+          : '';
+        return `<div class="hrow">
+          <div class="chk ${hb.done?'on':''}" onclick="toggleH(${hb.id})">${hb.done?'✓':''}</div>
+          <div class="hname">${hb.emoji} ${hb.name}${daysLabel}</div>
+          <div class="hstreak">🔥 ${hb.streak}j</div>
+          <button class="dbtn" onclick="delH(${hb.id})">×</button>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--text3);font-size:12px;padding:8px 0">Aucune habitude programmée aujourd\'hui</div>';
+
+  // Progress bar
+  const bar=document.getElementById('h-bar');
+  const pctEl=document.getElementById('h-pct');
+  if(bar) bar.style.width=pct+'%';
+  if(pctEl) pctEl.textContent=pct+'%';
+
+  // Week grid (score dots)
+  const DL=DAY_NAMES_SHORT;
+  const hwEl=document.getElementById('h-week');
+  if(hwEl) hwEl.innerHTML=
+    DL.map(d=>`<div class="wlbl">${d}</div>`).join('')+
+    DL.map((d,i)=>`<div class="wdot ${i<ti?'done':''} ${i===ti?'today':''}">${i<ti?'✓':i===ti?pct+'%':''}</div>`).join('');
+
+  // Mini chart
+  const mx=Math.max(...S.hist.map(h=>h[0]),1);
+  const mc=document.getElementById('h-mbars');
+  if(mc) mc.innerHTML=S.hist.map((h,i)=>
+    `<div class="mbar ${i===S.hist.length-1?'cur':h[0]>0?'on':''}" style="height:${Math.max(3,h[0]/mx*100)}%"></div>`).join('');
+
+  // ── Week panels (right column) ──
+  const weekEl=document.getElementById('h-week-panels');
+  if(!weekEl) return;
+
+  // Count weekly habits (habits with specific days set = "weekly")
+  const weeklyHabits=S.habits.filter(h=>h.days&&h.days.length>0);
+  const wc=document.getElementById('h-week-count');
+  if(wc) wc.textContent=weeklyHabits.length+' programmée'+(weeklyHabits.length>1?'s':'');
+
+  // Build one panel per day of the week showing what's scheduled
+  weekEl.innerHTML=DAY_NAMES_FULL.map((dayName,i)=>{
+    const dayHabits=S.habits.filter(h=>!h.days||h.days.length===0?false:h.days.includes(i));
+    const allDayHabits=habitsForDay(i); // includes daily ones
+    const isToday=i===ti;
+
+    if(dayHabits.length===0 && !isToday) return ''; // only show days with specific habits or today
+
+    const habitRows=dayHabits.map(hb=>`
+      <div class="hrow" style="padding:6px 0">
+        <div class="chk sm ${(isToday&&hb.done)?'on':''}" ${isToday?`onclick="toggleH(${hb.id})"`:'style="cursor:default"'}>${(isToday&&hb.done)?'✓':''}</div>
+        <div class="hname" style="font-size:12px">${hb.emoji} ${hb.name}</div>
+        ${isToday?`<div class="hstreak" style="font-size:10px;color:var(--text3)">🔥 ${hb.streak}j</div>`:''}
+      </div>`).join('');
+
+    const dailyCount=allDayHabits.filter(h=>!h.days||h.days.length===0).length;
+
+    return `<div class="hwpanel ${isToday?'today-panel':''}">
+      <div class="hwpanel-title" style="${isToday?'color:var(--accent2)':''}">
+        ${isToday?'⚡ ':''} ${dayName} ${isToday?'<span style="font-size:9px;font-weight:400;color:var(--text3);text-transform:none">— Aujourd\'hui</span>':''}
+      </div>
+      ${habitRows}
+      <div style="font-size:10px;color:var(--text3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">
+        + ${dailyCount} habitude${dailyCount>1?'s':''} quotidienne${dailyCount>1?'s':''}
+      </div>
+    </div>`;
+  }).filter(Boolean).join('');
+
+  // render challenges too
+  rChallenges();
+}
+
+// ══ HABIT CHALLENGES ══
+function toggleChallengeForm(){
+  const f=document.getElementById('challenge-form');
+  if(f) f.style.display=f.style.display==='none'?'block':'none';
+  // Set default start date to today
+  const sd=document.getElementById('nc-start');
+  if(sd&&!sd.value) sd.value=new Date().toISOString().split('T')[0];
+}
+
+function addChallenge(){
+  const name=document.getElementById('nc-name').value.trim();
+  if(!name) return;
+  const emoji=document.getElementById('nc-emoji').value.trim()||'🎯';
+  const duration=parseInt(document.getElementById('nc-duration').value);
+  const startDate=document.getElementById('nc-start').value||new Date().toISOString().split('T')[0];
+  const color=document.getElementById('nc-color').value;
+  S.habitChallenges.push({id:S.nextChallengeId++,name,emoji,duration,startDate,checkins:[],color});
+  document.getElementById('nc-name').value='';
+  document.getElementById('nc-emoji').value='';
+  document.getElementById('challenge-form').style.display='none';
+  rChallenges();
+}
+
+function delChallenge(id){
+  S.habitChallenges=S.habitChallenges.filter(c=>c.id!==id);
+  rChallenges();
+}
+
+function toggleCheckin(id){
+  const c=S.habitChallenges.find(c=>c.id===id);
+  if(!c) return;
+  const today=new Date().toISOString().split('T')[0];
+  const idx=c.checkins.indexOf(today);
+  if(idx>=0) c.checkins.splice(idx,1);
+  else c.checkins.push(today);
+  rChallenges();
+}
+
+function challengeStats(c){
+  const start=new Date(c.startDate); start.setHours(0,0,0,0);
+  const today=new Date(); today.setHours(0,0,0,0);
+  const end=new Date(start); end.setDate(end.getDate()+c.duration);
+  const elapsed=Math.max(0,Math.floor((today-start)/(1000*60*60*24)))+1;
+  const daysLeft=Math.max(0,Math.ceil((end-today)/(1000*60*60*24)));
+  const daysTotal=c.duration;
+  const checkedInPeriod=c.checkins.filter(d=>{const dd=new Date(d);return dd>=start&&dd<=today;}).length;
+  const consistency=elapsed>0?Math.round(checkedInPeriod/Math.min(elapsed,daysTotal)*100):0;
+  const daysElapsed=Math.min(elapsed,daysTotal);
+  const todayStr=new Date().toISOString().split('T')[0];
+  const doneToday=c.checkins.includes(todayStr);
+  const isFinished=today>=end;
+  const progressPct=Math.min(100,Math.round(daysElapsed/daysTotal*100));
+  // current streak
+  let streak=0;
+  const sortedCheckins=[...c.checkins].sort().reverse();
+  let checkDate=new Date(today);
+  for(let i=0;i<90;i++){
+    const ds=checkDate.toISOString().split('T')[0];
+    if(c.checkins.includes(ds)) streak++;
+    else if(i>0) break;
+    checkDate.setDate(checkDate.getDate()-1);
+  }
+  return{elapsed:daysElapsed,daysLeft,daysTotal,checkedInPeriod,consistency,doneToday,isFinished,progressPct,streak};
+}
+
+// Build 60-cell heat grid for a challenge
+function buildHeatGrid(c){
+  const start=new Date(c.startDate); start.setHours(0,0,0,0);
+  const cells=[];
+  for(let i=0;i<c.duration;i++){
+    const d=new Date(start); d.setDate(d.getDate()+i);
+    const ds=d.toISOString().split('T')[0];
+    const today=new Date(); today.setHours(0,0,0,0);
+    const isFuture=d>today;
+    const isChecked=c.checkins.includes(ds);
+    cells.push({ds,isFuture,isChecked,dayNum:i+1});
+  }
+  return cells;
+}
+
+// Draw radial progress on a canvas
+function drawRadial(canvasId,pct,color,label){
+  const cv=document.getElementById(canvasId);
+  if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const S2=80;
+  cv.style.width=S2+'px'; cv.style.height=S2+'px';
+  cv.width=S2*dpr; cv.height=S2*dpr;
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,S2,S2);
+  const cx=S2/2,cy=S2/2,r=30,lw=7;
+  // bg arc
+  ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);
+  ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
+  // progress arc
+  if(pct>0){
+    ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(Math.PI*2*pct/100));
+    ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
+  }
+  // center text
+  ctx.fillStyle=color;ctx.font=`bold ${pct>=100?14:13}px 'Geist',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(pct+'%',cx,cy-5);
+  ctx.fillStyle='rgba(160,154,142,0.7)';ctx.font=`9px 'Geist',sans-serif`;
+  ctx.fillText(label,cx,cy+9);
+}
+
+// Draw sparkline for last 14 days of a challenge
+function drawSparkline(canvasId,c,color){
+  const cv=document.getElementById(canvasId);
+  if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.parentElement.clientWidth||200,H=36;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const days=14;
+  const today=new Date();today.setHours(0,0,0,0);
+  const pts=[];
+  // rolling 7-day consistency per day
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    let hits=0,total=0;
+    for(let j=0;j<7;j++){
+      const dd=new Date(d);dd.setDate(dd.getDate()-j);
+      const ds=dd.toISOString().split('T')[0];
+      const start=new Date(c.startDate);start.setHours(0,0,0,0);
+      if(dd>=start&&dd<=today){total++;if(c.checkins.includes(ds))hits++;}
+    }
+    pts.push(total>0?hits/total:0);
+  }
+  const xP=i=>i/(days-1)*(W-4)+2;
+  const yP=v=>H-4-v*(H-8);
+  // fill
+  ctx.save();ctx.beginPath();
+  pts.forEach((v,i)=>{const x=xP(i),y=yP(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.lineTo(xP(days-1),H);ctx.lineTo(xP(0),H);ctx.closePath();
+  const gr=ctx.createLinearGradient(0,0,0,H);
+  gr.addColorStop(0,color+'55');gr.addColorStop(1,color+'00');
+  ctx.fillStyle=gr;ctx.fill();ctx.restore();
+  // line
+  ctx.beginPath();
+  pts.forEach((v,i)=>{const x=xP(i),y=yP(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.lineJoin='round';ctx.stroke();
+}
+
+function rChallenges(){
+  const grid=document.getElementById('challenge-grid');
+  if(!grid) return;
+
+  if(!S.habitChallenges.length){
+    grid.innerHTML=`<div class="card" style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text3)">
+      <div style="font-size:32px;margin-bottom:10px">🎯</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:6px">Aucun défi en cours</div>
+      <div style="font-size:12px">Crée ton premier défi d'habitude sur 30, 60 ou 90 jours.</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML=S.habitChallenges.map(c=>{
+    const st=challengeStats(c);
+    const cells=buildHeatGrid(c);
+    const radialId='rad-'+c.id;
+    const sparkId='spark-'+c.id;
+
+    // Motivation message
+    let motivMsg='';
+    if(st.isFinished) motivMsg=`<span style="color:var(--green);font-weight:700">🏆 Défi terminé !</span>`;
+    else if(st.daysLeft<=3) motivMsg=`<span style="color:var(--amber);font-weight:700">🔥 Sprint final — ${st.daysLeft} jour${st.daysLeft>1?'s':''} restant${st.daysLeft>1?'s':''} !</span>`;
+    else if(st.consistency>=80) motivMsg=`<span style="color:var(--green)">💪 Excellent rythme — continue !</span>`;
+    else if(st.consistency<40) motivMsg=`<span style="color:var(--red)">⚠️ Redresse le tir — tu peux le faire</span>`;
+    else motivMsg=`<span style="color:var(--text3)">📅 ${st.daysLeft} jour${st.daysLeft>1?'s':''} restant${st.daysLeft>1?'s':''}</span>`;
+
+    // Heat cells (show max 60, group if more)
+    const maxCells=c.duration<=60?c.duration:60;
+    const cellsToShow=cells.slice(0,maxCells);
+    const cellSize=c.duration<=30?18:c.duration<=60?14:11;
+    const heatHtml=`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px">
+      ${cellsToShow.map(cell=>{
+        const bg=cell.isFuture?'var(--border)':cell.isChecked?c.color:'var(--red-bg)';
+        const border=cell.isChecked?c.color:cell.isFuture?'var(--border2)':'var(--red)';
+        const opacity=cell.isFuture?'0.3':'1';
+        return `<div title="Jour ${cell.dayNum} — ${cell.ds}" style="width:${cellSize}px;height:${cellSize}px;border-radius:3px;background:${bg};border:1px solid ${border};opacity:${opacity};transition:all .15s;cursor:default"></div>`;
+      }).join('')}
+      ${c.duration>60?`<div style="font-size:10px;color:var(--text3);align-self:center;margin-left:4px">+${c.duration-60} jours</div>`:''}
+    </div>`;
+
+    return `<div class="card" style="border-left:3px solid ${c.color};position:relative">
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:20px">${c.emoji}</span>
+            <span style="font-family:'Instrument Serif',serif;font-size:17px;font-weight:600">${c.name}</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;background:${c.color}22;color:${c.color};border:1px solid ${c.color}55">${c.duration}j</span>
+          </div>
+          <div style="font-size:11px;color:var(--text3)">Début ${new Date(c.startDate).toLocaleDateString('fr-CH',{day:'numeric',month:'long'})} · ${motivMsg}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button onclick="toggleCheckin(${c.id})" style="padding:5px 12px;border-radius:var(--r-sm);border:1px solid ${st.doneToday?c.color:'var(--border2)'};background:${st.doneToday?c.color+'22':'var(--bg2)'};color:${st.doneToday?c.color:'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s">${st.doneToday?'✓ Fait':'Cocher'}</button>
+          <button class="dbtn" onclick="delChallenge(${c.id})">×</button>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:80px 1fr;gap:14px;align-items:center;margin-bottom:14px">
+        <canvas id="${radialId}"></canvas>
+        <div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
+            <div><div style="font-family:'Instrument Serif',serif;font-size:20px;color:${c.color}">${st.checkedInPeriod}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Jours réalisés</div></div>
+            <div><div style="font-family:'Instrument Serif',serif;font-size:20px;color:var(--amber)">${st.streak}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Série actuelle</div></div>
+            <div><div style="font-family:'Instrument Serif',serif;font-size:20px;color:var(--text2)">${st.daysLeft}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Jours restants</div></div>
+            <div><div style="font-family:'Instrument Serif',serif;font-size:20px;color:var(--purple)">${st.consistency}%</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Régularité</div></div>
+          </div>
+          <!-- Progress bar timeline -->
+          <div style="font-size:9px;color:var(--text3);margin-bottom:4px;display:flex;justify-content:space-between"><span>Jour ${st.elapsed} / ${st.daysTotal}</span><span>${st.isFinished?'Terminé':'En cours'}</span></div>
+          <div style="height:6px;background:var(--border);border-radius:99px;overflow:hidden"><div style="height:100%;width:${st.progressPct}%;background:${c.color};border-radius:99px;transition:width .5s"></div></div>
+          <!-- Sparkline -->
+          <div style="margin-top:8px;font-size:9px;color:var(--text3);margin-bottom:3px">Régularité sur 14 jours (glissant)</div>
+          <canvas id="${sparkId}"></canvas>
+        </div>
+      </div>
+
+      <!-- Heat map -->
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:9px;color:var(--text3);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between">
+          <span>Calendrier du défi</span>
+          <span style="display:flex;gap:8px">
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${c.color};margin-right:3px;vertical-align:middle"></span>Réalisé</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--red-bg);border:1px solid var(--red);margin-right:3px;vertical-align:middle"></span>Manqué</span>
+          </span>
+        </div>
+        ${heatHtml}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Draw all canvases after DOM update
+  requestAnimationFrame(()=>{
+    S.habitChallenges.forEach(c=>{
+      const st=challengeStats(c);
+      drawRadial('rad-'+c.id,st.consistency,c.color,'Régularité');
+      drawSparkline('spark-'+c.id,c,c.color);
+    });
+  });
+}
+function taskRow(t){
+  return `<div class="trow">
+    <div class="chk sm ${t.done?'on':''}" onclick="toggleT(${t.id})">${t.done?'✓':''}</div>
+    <div class="ttext ${t.done?'done':''}" style="flex:1">${t.text}</div>
+    ${t.dl?dlLabel(t.dl):''}
+    <button class="dbtn" onclick="delT(${t.id})" style="margin-left:4px">×</button>
+  </div>`;
+}
+function renderGroup(listEl, tasks){
+  if(!listEl) return;
+  listEl.innerHTML = tasks.length
+    ? tasks.map(taskRow).join('')
+    : '<div style="color:var(--text3);font-size:12px;padding:6px 0">Aucune tâche</div>';
+}
+function rTasks(){
+  const today=S.tasks.filter(t=>t.scope==='day');
+  const week=S.tasks.filter(t=>t.scope==='week');
+  const prios=['ui','imp','sec','att'];
+
+  // counts
+  const dayPending=today.filter(t=>!t.done).length;
+  const weekPending=week.filter(t=>!t.done).length;
+  const dc=document.getElementById('t-day-count');
+  const wc=document.getElementById('t-week-count');
+  if(dc) dc.textContent=dayPending+' restante'+(dayPending>1?'s':'');
+  if(wc) wc.textContent=weekPending+' restante'+(weekPending>1?'s':'');
+
+  prios.forEach(p=>{
+    renderGroup(document.getElementById('t-day-'+p+'-list'), today.filter(t=>t.prio===p));
+    renderGroup(document.getElementById('t-week-'+p+'-list'), week.filter(t=>t.prio===p));
+  });
+}
+
+// ══ RENDER SPORT ══
+const DAY_META=[
+  {label:'LUNDI — POUSSER',color:'var(--red)',icon:'💪',desc:'Pectoraux · Épaules · Triceps'},
+  {label:'MARDI — TIRER',color:'var(--blue)',icon:'🏋️',desc:'Dos · Arrière d\'épaule · Biceps'},
+  {label:'MERCREDI — JAMBES',color:'var(--green)',icon:'🦵',desc:'Quadriceps · Arrière de cuisse · Adducteurs & Mollets'},
+  {label:'VENDREDI — FULLBODY',color:'var(--amber)',icon:'🔥',desc:'Jambes · Dos · Adducteurs & Mollets'},
+];
+function spTab(d,btn){
+  S.activeDay=d;
+  document.querySelectorAll('#sp-day-tabs .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  rSport();
+}
+function rSport(){
+  const d=S.activeDay;
+  const meta=DAY_META[d];
+  // Morning banner
+  const isSportDay=[0,1,2,4].includes(new Date().getDay()===0?6:new Date().getDay()-1);
+  const todayWeekday=new Date().getDay();// 0=sun,1=mon...
+  const todayProgramDay=todayWeekday===1?0:todayWeekday===2?1:todayWeekday===3?2:todayWeekday===5?3:-1;
+  const todayMeta=todayProgramDay>=0?DAY_META[todayProgramDay]:null;
+  document.getElementById('sp-morning-banner').innerHTML=`
+    <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">⏰ Morning Routine — Jours de séance</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span style="background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber);font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">5h30 — Réveil</span>
+          <span style="color:var(--text3);font-size:12px">→</span>
+          <span style="background:var(--blue-bg);border:1px solid var(--blue);color:var(--blue);font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">5h45 — Prière & Lecture</span>
+          <span style="color:var(--text3);font-size:12px">→</span>
+          <span style="background:var(--green-bg);border:1px solid var(--green);color:var(--green);font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px">6h00 — Séance sport</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        ${todayMeta?`<div style="font-size:11px;color:var(--text3)">Séance du jour</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:18px;color:${todayMeta.color}">${todayMeta.icon} ${todayMeta.label}</div>`
+        :`<div style="font-size:12px;color:var(--text3)">Pas de séance aujourd'hui</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Repos · Récupération</div>`}
+      </div>
+    </div>`;
+
+  // Day title
+  document.getElementById('sp-day-title').innerHTML=`<span style="color:${meta.color}">${meta.icon} ${meta.label}</span><span style="font-size:10px;color:var(--text3);margin-left:8px;font-weight:400;text-transform:none;letter-spacing:0">${meta.desc}</span>`;
+
+  // Group exercises by muscle
+  const dayExs=S.program.filter(e=>e.day===d);
+  const muscles=[...new Set(dayExs.map(e=>e.muscle))];
+  const doneCnt=dayExs.filter(e=>e.done).length;
+  const pct=dayExs.length?Math.round(doneCnt/dayExs.length*100):0;
+
+  let html=`<div style="margin-bottom:14px">
+    <div class="pbar" style="height:6px"><div class="pfill g" style="width:${pct}%;height:100%"></div></div>
+    <div class="plbls"><span>${doneCnt}/${dayExs.length} exercices complétés</span><span style="color:${meta.color};font-weight:700">${pct}%</span></div>
+  </div>`;
+
+  muscles.forEach(m=>{
+    html+=`<div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:${meta.color};margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)">${m}</div>`;
+    dayExs.filter(e=>e.muscle===m).forEach(e=>{
+      html+=`<div class="exrow">
+        <div class="chk sm ${e.done?'on':''}" onclick="toggleEx(${e.id})">${e.done?'✓':''}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:500">${e.name}</div></div>
+        <div style="font-size:11px;color:var(--text3);white-space:nowrap">${e.s} × ${e.r}</div>
+        <button class="dbtn" onclick="delEx(${e.id})">×</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  if(!dayExs.length) html+='<div style="color:var(--text3);font-size:12px;padding:8px 0">Aucun exercice pour ce jour</div>';
+  document.getElementById('sp-list').innerHTML=html;
+
+  // Activate correct tab button on first load
+  document.querySelectorAll('#sp-day-tabs .fbtn').forEach((b,i)=>{
+    if(i===d) b.classList.add('active'); else b.classList.remove('active');
+  });
+
+  // Week grid
+  const todayIdx=new Date().getDay()===0?6:new Date().getDay()-1;
+  const DL=['L','M','M','J','V','S','D'];
+  const sportDayNames=['💪','🏋️','🦵','','🔥','',''];
+  document.getElementById('sp-week').innerHTML=
+    DL.map(dl=>`<div class="wlbl">${dl}</div>`).join('')+
+    DL.map((dl,i)=>{
+      const isS=S.wdays.includes(i);
+      return `<div class="wdot ${isS?'sport':''} ${i===todayIdx?'today':''}" onclick="toggleWD(${i})" title="${isS?'Séance prévue':'Repos'}">${isS?sportDayNames[i]||'💪':''}</div>`;
+    }).join('');
+
+  const mx=Math.max(...S.spHist,1);
+  document.getElementById('sp-mbars').innerHTML=S.spHist.map(v=>`<div class="mbar on" style="height:${v/mx*100}%"></div>`).join('');
+
+  drawDisciplineChart();
+}
+
+function drawDisciplineChart(){
+  const cv=document.getElementById('disciplineChart');
+  if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.parentElement.clientWidth-2;
+  const H=120;
+  cv.style.width=W+'px'; cv.style.height=H+'px';
+  cv.width=W*dpr; cv.height=H*dpr;
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+
+  const weeks=S.discipline;
+  const nW=weeks.length;
+  const days=['Lun','Mar','Mer','Ven'];
+  const nD=4;
+  const padL=42,padR=16,padT=22,padB=8;
+  const cW=W-padL-padR;
+  const cH=H-padT-padB;
+  const cellW=cW/nW;
+  const cellH=cH/nD;
+
+  // Column headers (weeks)
+  for(let w=0;w<nW;w++){
+    ctx.fillStyle='rgba(90,86,80,0.7)';
+    ctx.font=`9px 'Geist',sans-serif`;
+    ctx.textAlign='center';
+    const lbl=w===nW-1?'Actuel':`S${w+1}`;
+    ctx.fillText(lbl,padL+w*cellW+cellW/2,12);
+  }
+  // Row labels (days)
+  for(let d=0;d<nD;d++){
+    ctx.fillStyle='rgba(90,86,80,0.7)';
+    ctx.font=`9px 'Geist',sans-serif`;
+    ctx.textAlign='right';
+    ctx.fillText(days[d],padL-6,padT+d*cellH+cellH/2+3);
+  }
+
+  // Cells
+  const R=5;
+  for(let w=0;w<nW;w++){
+    for(let d=0;d<nD;d++){
+      const val=weeks[w][d];
+      const x=padL+w*cellW+3;
+      const y=padT+d*cellH+3;
+      const cw=cellW-6; const ch=cellH-6;
+      // Fill
+      if(val===true) ctx.fillStyle='rgba(74,222,128,0.85)';
+      else if(val===false) ctx.fillStyle='rgba(248,113,113,0.75)';
+      else ctx.fillStyle='rgba(58,55,48,0.5)';
+      // Rounded rect
+      ctx.beginPath();
+      ctx.moveTo(x+R,y); ctx.lineTo(x+cw-R,y);
+      ctx.quadraticCurveTo(x+cw,y,x+cw,y+R);
+      ctx.lineTo(x+cw,y+ch-R);
+      ctx.quadraticCurveTo(x+cw,y+ch,x+cw-R,y+ch);
+      ctx.lineTo(x+R,y+ch);
+      ctx.quadraticCurveTo(x,y+ch,x,y+ch-R);
+      ctx.lineTo(x,y+R);
+      ctx.quadraticCurveTo(x,y,x+R,y);
+      ctx.closePath();
+      ctx.fill();
+      // Icon
+      if(val===true){ ctx.fillStyle='rgba(15,14,12,0.8)'; ctx.font=`bold ${Math.min(11,cellH*0.5)}px sans-serif`; ctx.textAlign='center'; ctx.fillText('✓',x+cw/2,y+ch/2+4); }
+      else if(val===false){ ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.font=`${Math.min(10,cellH*0.45)}px sans-serif`; ctx.textAlign='center'; ctx.fillText('✗',x+cw/2,y+ch/2+3); }
+    }
+  }
+
+  // Stats
+  const allVals=weeks.flat().filter(v=>v!==null);
+  const done=allVals.filter(v=>v===true).length;
+  const missed=allVals.filter(v=>v===false).length;
+  const total=allVals.length;
+  const rate=total>0?Math.round(done/total*100):0;
+
+  const statsEl=document.getElementById('disc-stats');
+  if(statsEl) statsEl.innerHTML=`
+    <div style="text-align:center;flex:1">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--green)">${rate}%</div>
+      <div style="font-size:10px;color:var(--text3)">Taux de discipline</div>
+    </div>
+    <div style="text-align:center;flex:1">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--accent)">${done}</div>
+      <div style="font-size:10px;color:var(--text3)">Séances réalisées</div>
+    </div>
+    <div style="text-align:center;flex:1">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--red)">${missed}</div>
+      <div style="font-size:10px;color:var(--text3)">Séances ratées</div>
+    </div>
+    <div style="text-align:center;flex:1">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text2)">${nW}</div>
+      <div style="font-size:10px;color:var(--text3)">Semaines suivies</div>
+    </div>`;
+}
+
+// ══ RENDER BUDGET ══
+function rBudget(){
+  const totalAlloc = S.allocations.reduce((a,x)=>a+x.amount,0);
+  const balance = S.salaire - totalAlloc;
+  const totalSpent = S.deps.reduce((a,d)=>a+d.amt,0);
+
+  // Salary input
+  const salInput = document.getElementById('ni-salaire');
+  if(salInput && document.activeElement!==salInput) salInput.value = S.salaire;
+
+  // Allocated total + balance
+  document.getElementById('b-allocated').textContent = 'CHF ' + totalAlloc.toFixed(0);
+  const balEl = document.getElementById('b-balance');
+  if(balance===0) balEl.innerHTML = '<span style="color:var(--green)">✓ Finances équilibrées</span>';
+  else if(balance>0) balEl.innerHTML = '<span style="color:var(--amber)">CHF '+balance.toFixed(0)+' non alloués</span>';
+  else balEl.innerHTML = '<span style="color:var(--red)">⚠ Dépassement de CHF '+Math.abs(balance).toFixed(0)+'</span>';
+
+  // Allocation bar (proportional segments)
+  const barEl = document.getElementById('b-alloc-bar');
+  const denom = Math.max(totalAlloc, S.salaire);
+  barEl.innerHTML = S.allocations.map(a=>{
+    const w = denom>0 ? (a.amount/denom*100) : 0;
+    return `<div title="${a.name} — CHF ${a.amount}" style="width:${w}%;background:${a.color};transition:width .5s;display:flex;align-items:center;justify-content:center;color:#0f0e0c;font-size:9px;font-weight:700;overflow:hidden;white-space:nowrap">${w>8?a.emoji:''}</div>`;
+  }).join('') + (balance>0 ? `<div style="flex:1;background:var(--border)"></div>` : '');
+
+  // Allocation legend
+  document.getElementById('b-alloc-legend').innerHTML = S.allocations.map(a=>`
+    <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${a.color}"></span>${a.emoji} ${a.name} — <strong>${Math.round(a.amount/S.salaire*100)}%</strong></span>
+  `).join('');
+
+  // Stats
+  document.getElementById('b-stats').innerHTML = `
+    <div class="stat"><div class="slbl">Salaire net</div><div class="sval" style="color:var(--accent)">CHF ${S.salaire}</div><div class="ssub">par mois</div></div>
+    <div class="stat"><div class="slbl">Total alloué</div><div class="sval">${Math.round(totalAlloc/S.salaire*100)}%</div><div class="ssub">CHF ${totalAlloc.toFixed(0)}</div></div>
+    <div class="stat"><div class="slbl">Épargne / mois</div><div class="sval" style="color:var(--green)">CHF ${(S.allocations.find(a=>a.name==='Épargne')?.amount||0)+(S.allocations.find(a=>a.name==='Investissements')?.amount||0)}</div><div class="ssub">épargne + invest.</div></div>
+    <div class="stat"><div class="slbl">Fortune actuelle</div><div class="sval" style="color:var(--accent)">CHF ${(S.patrimoine.epargne+S.patrimoine.investissements+cryptoValueTotal()).toLocaleString('fr-CH')}</div><div class="ssub">épargne + invest. + crypto</div></div>`;
+
+  // Allocation cards
+  document.getElementById('b-allocs').innerHTML = S.allocations.map(a=>{
+    const spent = S.deps.filter(d=>d.allocId===a.id).reduce((s,d)=>s+d.amt,0);
+    const remaining = a.amount - spent;
+    const usedPct = a.amount>0 ? Math.min(100, spent/a.amount*100) : 0;
+    return `<div style="padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px;flex:1">
+          <span style="font-size:18px">${a.emoji}</span>
+          <div>
+            <div style="font-size:13px;font-weight:600">${a.name}</div>
+            <div style="font-size:10px;color:var(--text3)">${Math.round(a.amount/S.salaire*100)}% du salaire</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <input type="number" value="${a.amount}" oninput="updateAlloc(${a.id}, this.value)" style="width:75px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:5px 8px;color:${a.color};font-family:'Geist',sans-serif;font-size:13px;font-weight:700;text-align:right;outline:none"/>
+          <span style="color:var(--text3);font-size:11px;margin-left:2px">CHF</span>
+        </div>
+        <button class="dbtn" onclick="delAlloc(${a.id})">×</button>
+      </div>
+      <div style="height:5px;background:var(--border);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:${usedPct}%;background:${a.color};border-radius:99px;transition:width .5s"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px">
+        <span>Dépensé : CHF ${spent.toFixed(0)}</span>
+        <span style="color:${remaining<0?'var(--red)':'var(--green)'};font-weight:600">Reste : CHF ${remaining.toFixed(0)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Recent deps
+  document.getElementById('b-trans').innerHTML = [...S.deps].reverse().slice(0,8).map(d=>{
+    const a = S.allocations.find(al=>al.id===d.allocId);
+    return `<div class="bcat">
+      <div class="bcname" style="flex-wrap:wrap;gap:5px">${a?a.emoji:'📦'} ${d.desc}<span class="badge bm">${a?a.name:'—'}</span></div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="color:var(--red);font-weight:600;font-size:12px;white-space:nowrap">-CHF ${d.amt.toFixed(2)}</span>
+        <button class="dbtn" onclick="delDep(${d.id})">×</button>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--text3);font-size:12px;padding:8px 0">Aucune dépense ce mois</div>';
+
+  // Update select options for new dep
+  const sel = document.getElementById('ni-alloc-target');
+  if(sel) sel.innerHTML = S.allocations.map(a=>`<option value="${a.id}">${a.emoji} ${a.name}</option>`).join('');
+
+  // ── PATRIMOINE ──
+  const epargneAlloc = S.allocations.find(a=>a.name==='Épargne')?.amount || 0;
+  const investAlloc = S.allocations.find(a=>a.name==='Investissements')?.amount || 0;
+  const cryptoVal = cryptoValueTotal();
+  const netWorth = S.patrimoine.epargne + S.patrimoine.investissements + cryptoVal;
+  const nw = document.getElementById('b-net-worth');
+  if(nw) nw.textContent = netWorth.toLocaleString('fr-CH');
+
+  // Sync inputs (only if not focused)
+  const epIn = document.getElementById('ni-epargne');
+  if(epIn && document.activeElement!==epIn) epIn.value = S.patrimoine.epargne;
+  const inIn = document.getElementById('ni-invest');
+  if(inIn && document.activeElement!==inIn) inIn.value = S.patrimoine.investissements;
+  const rendIn = document.getElementById('ni-rend');
+  if(rendIn && document.activeElement!==rendIn) rendIn.value = S.patrimoine.rendementAnnuel;
+  const intIn = document.getElementById('ni-int');
+  if(intIn && document.activeElement!==intIn) intIn.value = S.patrimoine.interetEpargne;
+
+  // Sync crypto UI — build list dynamically
+  const linesEl = document.getElementById('crypto-lines');
+  if(linesEl){
+    // Find any currently focused input's id and cursor position so we don't clobber typing
+    const focused = document.activeElement;
+    const focusedId = focused && focused.id ? focused.id : null;
+    const focusedStart = focused && focused.selectionStart != null ? focused.selectionStart : null;
+
+    linesEl.innerHTML = S.crypto.lines.map(l => {
+      const value = (l.qty||0) * (l.price||0);
+      const qtyId = 'ni-crypto-qty-'+l.id;
+      const priceId = 'ni-crypto-price-'+l.id;
+      return `<div style="display:grid;grid-template-columns:56px 1fr 90px 90px 20px;gap:8px;align-items:center">
+        <span style="font-size:11px;font-weight:700;color:${l.color};white-space:nowrap">${l.symbol}</span>
+        <input type="number" step="0.00000001" id="${qtyId}" value="${l.qty||''}" oninput="updateCryptoQty(${l.id},this.value)" placeholder="0" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;text-align:right;outline:none;width:100%"/>
+        <input type="number" step="0.01" id="${priceId}" value="${l.price||''}" oninput="updateCryptoPrice(${l.id},this.value)" placeholder="prix" style="background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px 8px;color:${l.color};font-family:'Geist',sans-serif;font-size:11px;font-weight:600;text-align:right;outline:none;width:100%"/>
+        <span style="font-size:11px;font-weight:600;color:var(--accent);white-space:nowrap;text-align:right">CHF ${Math.round(value).toLocaleString('fr-CH')}</span>
+        <button onclick="delCryptoLine(${l.id})" title="Supprimer cette ligne" style="background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;font-size:13px;line-height:1;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">×</button>
+      </div>`;
+    }).join('') || '<div style="color:var(--text3);font-size:11px;padding:8px 0;text-align:center;font-style:italic">Aucune crypto — ajoute-en une ci-dessous</div>';
+
+    // Restore focus if user was typing
+    if(focusedId && focusedId.startsWith('ni-crypto-')){
+      const el = document.getElementById(focusedId);
+      if(el){
+        el.focus();
+        if(focusedStart != null){ try { el.setSelectionRange(focusedStart, focusedStart); } catch(_){} }
+      }
+    }
+  }
+
+  const cRendIn = document.getElementById('ni-crypto-rend');
+  if(cRendIn && document.activeElement!==cRendIn) cRendIn.value = S.crypto.rendementAnnuel;
+  const cTotEl = document.getElementById('b-crypto-total');
+  if(cTotEl) cTotEl.textContent = Math.round(cryptoVal).toLocaleString('fr-CH');
+  const cLastEl = document.getElementById('crypto-last');
+  if(cLastEl){
+    if(S.crypto.lastUpdate){
+      const d = new Date(S.crypto.lastUpdate);
+      cLastEl.textContent = 'Modifié le '+d.toLocaleDateString('fr-CH')+' à '+d.toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'});
+    } else {
+      cLastEl.textContent = 'Saisis tes prix pour démarrer';
+    }
+  }
+
+  const addEp = document.getElementById('b-add-epargne');
+  const addIn = document.getElementById('b-add-invest');
+  if(addEp) addEp.textContent = epargneAlloc;
+  if(addIn) addIn.textContent = investAlloc;
+
+  // Draw projection
+  drawPatrimoineChart();
+}
+
+// ══ CRYPTO ══
+function cryptoValueTotal(){
+  return S.crypto.lines.reduce((sum, l) => sum + (l.qty||0) * (l.price||0), 0);
+}
+function updateCryptoQty(id, val){
+  const l = S.crypto.lines.find(x => x.id === id);
+  if(!l) return;
+  const n = parseFloat(val);
+  l.qty = isNaN(n) ? 0 : Math.max(0, n);
+  S.crypto.lastUpdate = new Date().toISOString();
+  rBudget();
+}
+function updateCryptoPrice(id, val){
+  const l = S.crypto.lines.find(x => x.id === id);
+  if(!l) return;
+  const n = parseFloat(val);
+  if(!isNaN(n) && n >= 0){
+    l.price = n;
+    S.crypto.lastUpdate = new Date().toISOString();
+    rBudget();
+  }
+}
+function delCryptoLine(id){
+  S.crypto.lines = S.crypto.lines.filter(x => x.id !== id);
+  S.crypto.lastUpdate = new Date().toISOString();
+  rBudget();
+}
+function addCryptoLine(){
+  const sEl = document.getElementById('nc-crypto-symbol');
+  const qEl = document.getElementById('nc-crypto-qty');
+  const pEl = document.getElementById('nc-crypto-price');
+  const symbol = (sEl.value || '').trim().toUpperCase();
+  const qty = parseFloat(qEl.value);
+  const price = parseFloat(pEl.value);
+  if(!symbol) return;
+  const palette = ['#f7931a','#627eea','#9945ff','#2775ca','#26a17b','#e6007a','#345d9d','#8247e5','#ff007a','#0033ad','#00d395','#e84142'];
+  const color = palette[S.crypto.lines.length % palette.length];
+  S.crypto.lines.push({
+    id: S.crypto.nextId++,
+    symbol,
+    name: symbol,
+    color,
+    qty: isNaN(qty) ? 0 : Math.max(0, qty),
+    price: isNaN(price) ? 0 : Math.max(0, price),
+  });
+  S.crypto.lastUpdate = new Date().toISOString();
+  sEl.value = ''; qEl.value = ''; pEl.value = '';
+  rBudget();
+}
+function updateCryptoRendement(val){
+  const n = parseFloat(val);
+  if(!isNaN(n)){ S.crypto.rendementAnnuel = n; drawPatrimoineChart(); }
+}
+
+// ══ PROJECTION DE FORTUNE ══
+function projectPatrimoine(years){
+  const epargneAlloc = S.allocations.find(a=>a.name==='Épargne')?.amount || 0;
+  const investAlloc = S.allocations.find(a=>a.name==='Investissements')?.amount || 0;
+  const monthlyInt = S.patrimoine.interetEpargne / 100 / 12;
+  const monthlyRend = S.patrimoine.rendementAnnuel / 100 / 12;
+  const monthlyCrypto = S.crypto.rendementAnnuel / 100 / 12;
+  const months = years * 12;
+  const points = [];
+  let ep = S.patrimoine.epargne;
+  let inv = S.patrimoine.investissements;
+  let cry = cryptoValueTotal();
+  // Initial point (month 0)
+  points.push({m:0, ep, inv, cry, total:ep+inv+cry});
+  for(let i=1;i<=months;i++){
+    ep = ep * (1 + monthlyInt) + epargneAlloc;
+    inv = inv * (1 + monthlyRend) + investAlloc;
+    cry = cry * (1 + monthlyCrypto); // pas d'apport mensuel automatique côté crypto
+    points.push({m:i, ep, inv, cry, total:ep+inv+cry});
+  }
+  return points;
+}
+
+function setHorizon(years, btn){
+  S.horizon = years;
+  document.querySelectorAll('#b-horizon-tabs .fbtn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  drawPatrimoineChart();
+}
+
+function updatePatrimoine(key, val){
+  const n = parseFloat(val);
+  if(!isNaN(n) && n>=0){
+    S.patrimoine[key] = n;
+    rBudget();
+  }
+}
+function updateRendement(val){
+  const n = parseFloat(val);
+  if(!isNaN(n)){ S.patrimoine.rendementAnnuel = n; drawPatrimoineChart(); }
+}
+function updateInteret(val){
+  const n = parseFloat(val);
+  if(!isNaN(n)){ S.patrimoine.interetEpargne = n; drawPatrimoineChart(); }
+}
+
+function drawPatrimoineChart(){
+  const cv = document.getElementById('patrimoine-chart');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.parentElement.clientWidth - 40;
+  const H = 220;
+  cv.style.width = W+'px';
+  cv.style.height = H+'px';
+  cv.width = W*dpr;
+  cv.height = H*dpr;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0,0,W,H);
+
+  const years = S.horizon;
+  const points = projectPatrimoine(years);
+  const maxTotal = points[points.length-1].total;
+  const startTotal = points[0].total;
+
+  const padL = 70, padR = 16, padT = 18, padB = 32;
+  const cW = W - padL - padR;
+  const cH = H - padT - padB;
+
+  const xP = m => padL + (m / (years*12)) * cW;
+  const yP = v => padT + cH * (1 - v/maxTotal);
+
+  // Grid + Y labels
+  for(let i=0; i<=4; i++){
+    const y = padT + cH * (1 - i/4);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(160,154,142,0.5)';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    const v = (maxTotal*i/4);
+    const lbl = v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1000 ? Math.round(v/1000)+'k' : Math.round(v);
+    ctx.fillText('CHF '+lbl, padL-6, y+3);
+  }
+
+  // X labels (years)
+  const yearStep = years <= 1 ? (1/12) : years <= 5 ? 1 : years <= 10 ? 2 : 5;
+  for(let y=0; y<=years; y+=yearStep){
+    const x = xP(y*12);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.moveTo(x, padT); ctx.lineTo(x, padT+cH); ctx.stroke();
+    ctx.fillStyle = 'rgba(90,86,80,0.8)';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    const lbl = y===0 ? 'Auj.' : y<1 ? Math.round(y*12)+'m' : 'Année '+Math.round(y);
+    ctx.fillText(lbl, x, H-padB+18);
+  }
+
+  // ── Stacked areas (empilées de bas en haut) : Épargne → Investissements → Crypto ──
+  // Bottom area : épargne
+  ctx.save();
+  ctx.beginPath();
+  points.forEach((p,i)=>{
+    const x=xP(p.m), y=yP(p.ep);
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.lineTo(xP(points[points.length-1].m), padT+cH);
+  ctx.lineTo(xP(0), padT+cH);
+  ctx.closePath();
+  const grEp = ctx.createLinearGradient(0, padT, 0, padT+cH);
+  grEp.addColorStop(0, 'rgba(74,222,128,0.45)');
+  grEp.addColorStop(1, 'rgba(74,222,128,0.08)');
+  ctx.fillStyle = grEp;
+  ctx.fill();
+  ctx.restore();
+
+  // Middle area : investissements empilés au-dessus de l'épargne
+  ctx.save();
+  ctx.beginPath();
+  points.forEach((p,i)=>{
+    const x=xP(p.m), y=yP(p.ep + p.inv);
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  for(let i=points.length-1; i>=0; i--){
+    const p = points[i];
+    ctx.lineTo(xP(p.m), yP(p.ep));
+  }
+  ctx.closePath();
+  const grIn = ctx.createLinearGradient(0, padT, 0, padT+cH);
+  grIn.addColorStop(0, 'rgba(196,169,107,0.55)');
+  grIn.addColorStop(1, 'rgba(196,169,107,0.12)');
+  ctx.fillStyle = grIn;
+  ctx.fill();
+  ctx.restore();
+
+  // Top area : crypto empilée au-dessus de invest — seulement s'il y a des holdings
+  const hasCrypto = points[0].cry > 0 || points[points.length-1].cry > 0;
+  if(hasCrypto){
+    ctx.save();
+    ctx.beginPath();
+    points.forEach((p,i)=>{
+      const x=xP(p.m), y=yP(p.total);
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    for(let i=points.length-1; i>=0; i--){
+      const p = points[i];
+      ctx.lineTo(xP(p.m), yP(p.ep + p.inv));
+    }
+    ctx.closePath();
+    const grCry = ctx.createLinearGradient(0, padT, 0, padT+cH);
+    grCry.addColorStop(0, 'rgba(247,147,26,0.55)');
+    grCry.addColorStop(1, 'rgba(247,147,26,0.12)');
+    ctx.fillStyle = grCry;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Line ép
+  ctx.beginPath();
+  points.forEach((p,i)=>{ const x=xP(p.m), y=yP(p.ep); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+  ctx.strokeStyle = 'rgba(74,222,128,0.85)';
+  ctx.lineWidth = 1.5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // Line total
+  ctx.beginPath();
+  points.forEach((p,i)=>{ const x=xP(p.m), y=yP(p.total); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+  ctx.strokeStyle = 'rgba(232,213,163,0.95)';
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // End dot + label
+  const endP = points[points.length-1];
+  ctx.beginPath();
+  ctx.arc(xP(endP.m), yP(endP.total), 5, 0, Math.PI*2);
+  ctx.fillStyle = '#e8d5a3';
+  ctx.fill();
+  ctx.fillStyle = 'rgba(232,213,163,0.95)';
+  ctx.font = "bold 11px 'Geist',sans-serif";
+  ctx.textAlign = 'right';
+  const endLbl = endP.total >= 1e6 ? 'CHF '+(endP.total/1e6).toFixed(2)+'M' : 'CHF '+Math.round(endP.total).toLocaleString('fr-CH');
+  ctx.fillText(endLbl, xP(endP.m)-2, yP(endP.total)-10);
+
+  // Start dot
+  ctx.beginPath();
+  ctx.arc(xP(0), yP(startTotal), 4, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(160,154,142,0.8)';
+  ctx.fill();
+
+  // Legend (top-left)
+  ctx.fillStyle = 'rgba(196,169,107,0.95)';
+  ctx.fillRect(padL+4, padT+4, 10, 10);
+  ctx.fillStyle = 'rgba(160,154,142,0.9)';
+  ctx.font = "10px 'Geist',sans-serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('Investissements', padL+18, padT+13);
+  ctx.fillStyle = 'rgba(74,222,128,0.85)';
+  ctx.fillRect(padL+118, padT+4, 10, 10);
+  ctx.fillStyle = 'rgba(160,154,142,0.9)';
+  ctx.fillText('Épargne', padL+132, padT+13);
+  if(hasCrypto){
+    ctx.fillStyle = 'rgba(247,147,26,0.85)';
+    ctx.fillRect(padL+188, padT+4, 10, 10);
+    ctx.fillStyle = 'rgba(160,154,142,0.9)';
+    ctx.fillText('Crypto', padL+202, padT+13);
+  }
+
+  // Stats
+  const versé = startTotal + (S.allocations.find(a=>a.name==='Épargne')?.amount||0)*years*12 + (S.allocations.find(a=>a.name==='Investissements')?.amount||0)*years*12;
+  const interets = endP.total - versé;
+  const fmt = v => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : Math.round(v).toLocaleString('fr-CH');
+  const fEl = document.getElementById('b-h-final'); if(fEl) fEl.textContent = 'CHF '+fmt(endP.total);
+  const vEl = document.getElementById('b-h-versé'); if(vEl) vEl.textContent = 'CHF '+fmt(versé);
+  const iEl = document.getElementById('b-h-int'); if(iEl) iEl.textContent = '+CHF '+fmt(interets);
+  const lEl = document.getElementById('b-h-label'); if(lEl) lEl.textContent = years===1 ? '1 an' : years+' ans';
+}
+
+// ══ RENDER OBJECTIFS ══
+function rObjs(){
+  document.getElementById('obj-list').innerHTML=S.objs.map(o=>`
+    <div class="objrow"><div class="objhead">
+      <div class="objname">${o.emoji} ${o.name}</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="objpct">${o.p}%</div>
+        <button class="dbtn" onclick="delObj(${o.id})">×</button>
+      </div></div>
+      <div class="pbar" style="margin-bottom:6px"><div class="pfill" style="width:${o.p}%"></div></div>
+      <input type="range" min="0" max="100" value="${o.p}" oninput="updObj(${o.id},this.value)"/>
+    </div>`).join('');
+  const avg=S.objs.length?Math.round(S.objs.reduce((a,o)=>a+o.p,0)/S.objs.length):0;
+  document.getElementById('obj-avg').textContent=avg+'%';
+  document.getElementById('obj-sub').textContent='sur '+S.objs.length+' objectifs';
+  document.getElementById('obj-abar').style.width=avg+'%';
+  if(S.notes) document.getElementById('notes').value=S.notes;
+}
+
+// ══ RENDER BIBLE ══
+function rBible(){
+  const tot=S.bible.reduce((a,b)=>a+b.r,0),pct=((tot/1189)*100).toFixed(2);
+  document.getElementById('bi-pct').textContent=pct+'%';
+  document.getElementById('bi-chap').textContent=tot+' / 1189 ch.';
+  document.getElementById('bi-start').textContent=S.bible.filter(b=>b.r>0&&b.r<b.ch).length;
+  document.getElementById('bi-done').textContent=S.bible.filter(b=>b.r>=b.ch).length;
+  document.getElementById('bi-bigpct').textContent=pct+'%';
+  document.getElementById('bi-bar').style.width=pct+'%';
+  if(S.biLast){document.getElementById('bi-last').textContent=S.biLast;document.getElementById('bi-ld').textContent=S.biLD||'';}
+  let books=S.bible;
+  if(S.bif==='at') books=books.filter(b=>b.t==='at');
+  else if(S.bif==='nt') books=books.filter(b=>b.t==='nt');
+  else if(S.bif==='done') books=books.filter(b=>b.r>=b.ch);
+  else if(S.bif==='progress') books=books.filter(b=>b.r>0&&b.r<b.ch);
+  document.getElementById('bible-grid').innerHTML=books.map(b=>{
+    const p=b.ch>0?Math.min(100,Math.round(b.r/b.ch*100)):0;
+    const isDone=b.r>=b.ch,isS=b.r>0&&!isDone;
+    const tc=b.t==='at'?'var(--amber)':'var(--blue)';
+    const dots=b.ch<=30?`<div class="bdots">${Array.from({length:b.ch},(_,i)=>
+      `<div class="bdot ${i<b.r?'read':''}" onclick="biChap('${b.id}',${i+1})" title="Ch.${i+1}">${i+1}</div>`).join('')}</div>`:'';
+    return `<div class="bbook ${isDone?'done':isS?'started':''}">
+      <div class="bbhdr">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span class="bbname">${b.n}</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;background:${tc}22;color:${tc}">${b.t.toUpperCase()}</span>
+          ${isDone?'<span style="font-size:12px">✅</span>':''}
+        </div>
+        <span class="bbpct" style="color:${isDone?'var(--green)':'var(--purple)'}">${p}%</span>
+      </div>
+      <div class="pbar" style="margin-bottom:8px"><div class="pfill p" style="width:${p}%;${isDone?'background:var(--green)':''}"></div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:11px;color:var(--text3)">${b.r} / ${b.ch} ch.</span>
+        <div class="bbctrls">
+          <button class="bctrl bctrl-m" onclick="biAdd('${b.id}',-1)">−</button>
+          <button class="bctrl bctrl-p" onclick="biAdd('${b.id}',1)">+</button>
+          <button class="bctrl bctrl-a" onclick="biAll('${b.id}')">TOUT ✓</button>
+        </div>
+      </div>${dots}</div>`;
+  }).join('');
+}
+
+// ══ PERSISTENCE ══
+const STORAGE_KEY = '2eme-cerveau-state-v1';
+
+function saveState(){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+  } catch(e){
+    console.warn('Sauvegarde impossible :', e);
+  }
+}
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const parsed = JSON.parse(raw);
+    // Fusion superficielle — on garde les nouvelles clés du code si l'état sauvegardé est ancien
+    S = Object.assign({}, S, parsed);
+    return true;
+  } catch(e){
+    console.warn('Chargement impossible :', e);
+    return false;
+  }
+}
+
+function exportState(){
+  const data = JSON.stringify(S, null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `2eme-cerveau-backup-${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importState(ev){
+  const file = ev.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if(!confirm('Remplacer toutes tes données actuelles par celles du fichier ?')) return;
+      S = Object.assign({}, S, parsed);
+      saveState();
+      renderAll();
+      alert('Importation réussie.');
+    } catch(err){
+      alert('Fichier invalide : ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  ev.target.value = ''; // reset pour permettre re-import du même fichier
+}
+
+function resetState(){
+  if(!confirm('⚠️ Effacer toutes tes données et repartir de zéro ? Cette action est irréversible.')) return;
+  if(!confirm('Vraiment sûr ? Pense à exporter une sauvegarde d\'abord.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// ══ RENDER ALL ══
+function renderAll(){rOverview();rHabits();rTasks();rSport();rBudget();rObjs();rBible();saveState();}
+
+// ══ ACTIONS ══
+function toggleH(id){const h=S.habits.find(h=>h.id===id);if(h){h.done=!h.done;if(h.done)h.streak++;}renderAll();}
+function delH(id){S.habits=S.habits.filter(h=>h.id!==id);renderAll();}
+function addHabit(){
+  const name=document.getElementById('ni-hab-name').value.trim();
+  if(!name) return;
+  const emoji=document.getElementById('ni-hab-emoji').value.trim()||'⭐';
+  const scope=document.getElementById('ni-hab-scope').value;
+  const checked=[...document.querySelectorAll('#ni-hab-days input:checked')].map(cb=>parseInt(cb.value));
+  S.habits.push({id:S.nid++,name,emoji,done:false,streak:0,days:checked,scope});
+  document.getElementById('ni-hab-name').value='';
+  document.getElementById('ni-hab-emoji').value='';
+  document.querySelectorAll('#ni-hab-days input').forEach(cb=>cb.checked=false);
+  renderAll();
+}
+
+function toggleT(id){const t=S.tasks.find(t=>t.id===id);if(t)t.done=!t.done;renderAll();}
+function delT(id){S.tasks=S.tasks.filter(t=>t.id!==id);renderAll();}
+function addTask(){
+  const text=document.getElementById('ni-task-text').value.trim();
+  if(!text) return;
+  const prio=document.getElementById('ni-task-prio').value;
+  const scope=document.getElementById('ni-task-scope').value;
+  const dl=document.getElementById('ni-task-dl').value;
+  S.tasks.push({id:S.nid++,text,prio,scope,dl,done:false});
+  document.getElementById('ni-task-text').value='';
+  document.getElementById('ni-task-dl').value='';
+  renderAll();
+}
+
+function toggleEx(id){const e=S.program.find(e=>e.id===id);if(e)e.done=!e.done;rSport();}
+function delEx(id){S.program=S.program.filter(e=>e.id!==id);rSport();}
+function addEx(){
+  const n=document.getElementById('ni-ex').value.trim();
+  const m=document.getElementById('ni-muscle').value.trim()||'Autre';
+  const s=document.getElementById('ni-sets').value||'3';
+  const r=document.getElementById('ni-reps').value||'10';
+  if(!n)return;
+  S.program.push({day:S.activeDay,muscle:m,name:n,s:parseInt(s),r,done:false,id:S.nid++});
+  ['ni-ex','ni-muscle','ni-sets','ni-reps'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  rSport();
+}
+function toggleWD(i){if(S.wdays.includes(i))S.wdays=S.wdays.filter(d=>d!==i);else S.wdays.push(i);renderAll();}
+
+function addDep(){
+  const d=document.getElementById('ni-desc').value.trim();
+  const a=parseFloat(document.getElementById('ni-amt').value);
+  const allocId=parseInt(document.getElementById('ni-alloc-target').value);
+  if(!d||isNaN(a))return;
+  S.deps.push({id:S.nid++,desc:d,amt:a,allocId,dt:new Date().toISOString().split('T')[0]});
+  document.getElementById('ni-desc').value='';
+  document.getElementById('ni-amt').value='';
+  renderAll();
+}
+function delDep(id){S.deps=S.deps.filter(d=>d.id!==id);renderAll();}
+function updateSalary(v){const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.salaire=n;rBudget();}}
+function updateAlloc(id,v){
+  const a=S.allocations.find(x=>x.id===id);
+  const n=parseFloat(v);
+  if(a&&!isNaN(n)&&n>=0){a.amount=n;rBudget();}
+}
+function addAlloc(){
+  const name=document.getElementById('ni-alloc-name').value.trim();
+  const emoji=document.getElementById('ni-alloc-emoji').value.trim()||'📦';
+  const amt=parseFloat(document.getElementById('ni-alloc-amt').value)||0;
+  if(!name)return;
+  const colors=['#60a5fa','#fbbf24','#4ade80','#a78bfa','#c4a96b','#f87171','#22d3ee','#fb923c'];
+  const color=colors[S.allocations.length%colors.length];
+  S.allocations.push({id:S.nextAllocId++,name,emoji,amount:amt,color});
+  document.getElementById('ni-alloc-name').value='';
+  document.getElementById('ni-alloc-emoji').value='';
+  document.getElementById('ni-alloc-amt').value='';
+  renderAll();
+}
+function delAlloc(id){
+  if(!confirm('Supprimer cette enveloppe ?'))return;
+  S.allocations=S.allocations.filter(a=>a.id!==id);
+  S.deps=S.deps.filter(d=>d.allocId!==id);
+  renderAll();
+}
+
+function addObj(){const n=document.getElementById('ni-obj').value.trim(),d=document.getElementById('ni-ddl').value;if(!n)return;S.objs.push({id:S.nid++,name:n,emoji:'🎯',p:0,dl:d});document.getElementById('ni-obj').value='';document.getElementById('ni-ddl').value='';renderAll();}
+function delObj(id){S.objs=S.objs.filter(o=>o.id!==id);renderAll();}
+function updObj(id,v){const o=S.objs.find(o=>o.id===id);if(o){o.p=parseInt(v);renderAll();}}
+function saveNotes(){S.notes=document.getElementById('notes').value;const ok=document.getElementById('nok');ok.textContent='✓ Enregistré';ok.style.opacity='1';setTimeout(()=>ok.style.opacity='0',2000);}
+
+function biAdd(id,d){const b=S.bible.find(b=>b.id===id);if(!b)return;b.r=Math.max(0,Math.min(b.ch,b.r+d));if(d>0){S.biLast=b.n+' ch.'+b.r;S.biLD=new Date().toLocaleDateString('fr-CH');}rBible();}
+function biChap(id,c){const b=S.bible.find(b=>b.id===id);if(!b)return;b.r=c<=b.r?c-1:c;S.biLast=b.n+' ch.'+c;S.biLD=new Date().toLocaleDateString('fr-CH');rBible();}
+function biAll(id){const b=S.bible.find(b=>b.id===id);if(!b)return;b.r=b.ch;S.biLast=b.n+' (terminé)';S.biLD=new Date().toLocaleDateString('fr-CH');rBible();}
+function biF(f,btn){S.bif=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rBible();}
+function biReset(){if(!confirm('Réinitialiser toute la progression ?'))return;S.bible.forEach(b=>b.r=0);S.biLast=null;rBible();}
+
+// ══ KEYBOARD ══
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const id=document.activeElement?.id;
+  if(id==='ni-hab-name')addHabit();
+  else if(id==='ni-ui')addTask('ui');
+  else if(id==='ni-imp')addTask('imp');
+  else if(id==='ni-sec')addTask('sec');
+  else if(id==='ni-att')addTask('att');
+  else if(id==='ni-obj')addObj();
+  else if(id==='ni-desc')addDep();
+});
+
+// ══ INIT ══
+initDate();
+loadState();
+renderAll();
+window.addEventListener('resize',()=>{
+  if(document.getElementById('s-overview').classList.contains('active')) drawChart();
+  if(document.getElementById('s-sport').classList.contains('active')) drawDisciplineChart();
+  if(document.getElementById('s-habitudes').classList.contains('active')) rChallenges();
+  if(document.getElementById('s-budget').classList.contains('active')) drawPatrimoineChart();
+});
+</script>
+</body>
+</html>
